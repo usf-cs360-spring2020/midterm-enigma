@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- TODO: Change title -->
+    <title>CS 560: Midterm - Enigma</title>
+
+    <!-- Load Bulma from CDN (consider saving it to repository instead) -->
+    <!-- https://bulma.io/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="../styles.css">
+
+    <!-- Load Font Awesome 5 (free) icons -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  </head>
+
+  <body>
+    <!-- Page header -->
+    <!-- https://bulma.io/documentation/layout/hero/ -->
+    <section class="hero is-primary is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <!-- TODO: Change title -->
+          <h1 class="title">CS 560: Midterm Team Enigma</h1>
+        </div>
+      </div>
+    </section>
+    <!-- End page header -->
+
+    <!-- Page navigation -->
+    <!-- https://bulma.io/documentation/components/navbar/ -->
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+      <div class="container">
+        <div class="navbar-brand">
+          <!-- TODO: Change link to repository homepage if needed -->
+          <!-- TODO: Change which navbar-item is-active if needed -->
+          <a class="navbar-item is-active" href="../index.html">
+            <span class="icon"><i class="fas fa-home"></i></span>
+            <span>Home</span>
+          </a>
+
+          <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="main-menu">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div id="main-menu" class="navbar-menu has-text-weight-medium">
+          <!-- Left navbar items -->
+          <div class="navbar-start">
+            <a class="navbar-item" href="../dataset.html" title="Data">
+              <span class="icon"><i class="fas fa-table"></i></span>
+              <span>Data</span>
+            </a>
+
+            <a class="navbar-item" href="../about.html" title="About">
+              <span class="icon"><i class="fas fa-info-circle"></i></span>
+              <span>About</span>
+            </a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                Prototypes
+              </a>
+
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="./prototypes/nick.html">
+                  <span class="icon"><i class="fas fa-chart-line"></i></span>
+                  <span>Trends of Number of Called Deemed "Life Threatening"</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- End page navigation -->
+    <section class="section">
+      <div class="container">
+        <!-- Begin page content -->
+        <div class="content">
+          <h1 class="title">
+            <!-- TODO: Change page title -->
+            Trends of Number of Called Deemed "Life Threatening"
+          </h1>
+    <h2> Data Wrangling </h2>
+    Data was wrangled first prior to download, through the editor provided on the data provider's website.
+    There, we were able to filter to download only the calls that were part of the call group "Life-Threatening", and only download data between the years of 2013 and 2019.
+    That data was then wrangled in Excel, where we removed unecessary columns.
+    Finally, additional filtering, namely excluding all but the top 15 neighborhoods in terms of number of life-threatening calls, was done in Tableau.
+    <h2> Visualizations </h2>
+    <p>
+      This visualization shows the number of calls deemed life-threatening from 2013 to 2019, per neighborhood, for the 15 neighborhoods with the most number of such calls.
+      The x-axis indicates the time period by year, while the y-axis indicates the number of calls for each year.  Since this is broken down by neighborhood, each neighborhood is colored, and the color is indicated in the legend that accompanies the chart.
+      There is clearly an upward trend in terms of calles deemed life-threatening in most of the neighborhoods indicated in the chart.  This may in part be because of an increase in population year over year, so we can not necessarily conclude that there's an increase in calls per person.
+      However, considering some of the neighborhoods included in this visualization have increases of 50% (Tenderloin, Bayview/Hunter's Point) to 75% (South of Market), it's likely these increases in life-threatening calls are not only because of an increase in population.
+    </p>
+    <img src="./images/midterm_project_mockup.png" >
+    <p>
+      To provide further clarity, we've included three visualizations that break down the call type of the life-threatening calls in select neighborhoods (Tenderloin, Pacific Heights, and Financial District/South Beach respectively).
+      It's evident that in the tenderloin, there is a lower percentage of traffic related accidents that contribute to the total number of life-threatening calls compared to Pacific Heights and the Financial District/South Beach neighborhoods.
+      Further, traffic collisions remained more or less stable over the period we're examining, while call types related to other medical incidents increased significantly.  If the increase in life-threatening call types was solely because of an increase in population, we would also expect the number of calls relating to traffic collisions to increase consistently.
+    </p>
+    <img class="image-mid center" src="./images/tenderloin_breakdown.png" >
+
+    <img class="image-mid center" src="./images/pacific_heights_breakdown.png" >
+
+    <img class="image-mid center" src="./images/fin_district_breakdown.png" >
+  </div>
+  <!-- End page content -->
+</div>
+</section>
+</body>
