@@ -94,6 +94,28 @@
             <h1 class="title">
                 Call Type Group Trends for Each Neighborhood
             </h1>
+
+            <h2> Data Wrangling </h2>
+            Data was wrangled first prior to download, through the editor provided on the data provider's website.
+            There, we filtered the data for calls between the years of 2013 and 2019. Then in Tableau, we filtered out any rows that did not have a valid Call Type Group value;
+            <h2> Visualizations </h2>
+            <p>
+                This visualization shows the number of calls for each Call Type Group in each neighborhood. The four valid Call Type Groups are:
+                <ol>
+                    <li>Alarm</li>
+                    <li>Fire</li>
+                    <li>Non Life-Threatening</li>
+                    <li>Potentially Life-Threatening</li>
+                </ol>
+                The x-axis indicates the Call Type Group, while the y-axis indicates the neighborhood names. The number of calls per Call Type Group for each neighborhood is encoded by color in a heatmap. The provided legend shows the full range of total numbers of calls.
+                There seems to be a trend for areas with a high amount of calls to also have a high amount of potentially life-threatening calls. This may be partly due to the high population density of San Francisco, especially in the downtown neighborhoods. Note, this dataset does not include population data so this visualization is not meant to be an accurate reading of if neighborhoods with high amount of calls are more dangerous than the others.
+            </p>
+            <img src="./images/incident_type_group_per_neighborhood.png" >
+            <p>
+                To give more context, another visualization is included to show the total number of calls and the Final Priorities of the calls from each neighborhood. The bars of each stack are encoded by color for Final Priority. The Final Priority is determined by the Fire Departments to say whether or not the call was actually an emergency or not.
+                While people may report an emergency when calling in it is up to the Fire Departments to determine if the call is deemed an emergency or not.
+            </p>
+            <img src="./images/final_priorities_per_neighborhood.png" >
         </div>
         <!-- End page content -->
     </div>
