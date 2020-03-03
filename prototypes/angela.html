@@ -61,18 +61,18 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a class="navbar-item" href="nick.html">
-                            <span class="icon"><i class="fas fa-chart-line"></i></span>
-                            <span>Trends of Number of Called Deemed "Life Threatening"</span>
-                        </a>
-                        <a class="navbar-item" href="drew.html" title="Drew">
-                            <span class="icon"><i class="far fa-caret-square-down"></i></span>
-                            <span>Call Type Group Trends for Each Neighborhood</span>
-                        </a>
-                        <a class="navbar-item" href="angela.html" title="Angela">
-                            <span class="icon"><i class="far fa-caret-square-down"></i></span>
-                            <span>TODO</span>
-                        </a>
+                      <a class="navbar-item" href="nick.html">
+                        <span class="icon"><i class="fas fa-chart-line"></i></span>
+                        <span>Trends of Number of Calls Deemed "Life Threatening"</span>
+                      </a>
+                      <a class="navbar-item" href="drew.html" title="Drew">
+                        <span class="icon"><i class="far fa-caret-square-down"></i></span>
+                        <span>Call Type Group Trends for Each Neighborhood</span>
+                      </a>
+                      <a class="navbar-item" href="angela.html" title="Angela">
+                        <span class="icon"><i class="fas fa-chart-area"></i></span>
+                        <span>Emergency Fire Response in the Tenderloin</span>
+                      </a>
                     </div>
                 </div>
 
@@ -90,10 +90,15 @@
     <div class="container">
         <!-- Begin page content -->
         <div class="content">
-            <h1 class="title">
-                Call Type Group Trends for Each Neighborhood
-            </h1>
-        </div>
+          <h1 class="title"> Call Type Group Trends for Each Neighborhood </h1>
+         <h2>Data Wrangling</h2>
+         <p>I used the filter function on the SF Data website to filter on calls from the Tenderloin neighborhood, received during 2019 (received after 1/1/2019 12 AM, received before 1/1/2020 12 AM) where the call group type was fire, and the final priority was 3 (emergency). I used Tableau to extract the call date (MM/DD) from the Received Date column and used the DATEDIFF function to calculate the length (subtracting the call received time from the time the unit was available again).</p>
+         <h2>Visualization Prototype</h2> <img src="images/fire_bubble_prototype.png">
+        <p>The Tenderloin has a reputation for being a bad neighborhood with a lot of emergency calls, as the other broader visualizations in this project will demonstrate. I wanted to drill down deeper into one neighborhood and look for any trends when these calls are happening (do they correlate with work hours? Are there more fires over the summer?) Depressingly, there were too many emergency medical calls, but when I filtered on fire calls in one neighborhood over one year, I got a much more manageable number of calls.</p>
+        <p>Most calls are outside fires and most of them are responded to pretty quickly. Vehicle fires similarly seem to be relatively minor (makes sense considering smaller size of vehicle). However, industrial accidents and structure fires seem to take longer, potentially over an hour, before the unit is free again.</p>
+        <h2>Future Steps</h2> <p>I would like to add interactive functionality
+        so that when you mouse over a particular bubble, a tooltip comes up with
+        more information about that particular incident. It would also be cool if I could have a timeline slider (to show more years' data) or an option to select neighborhood, since I had to filter pretty heavily to create a manageable subset of data.</p> </div>
         <!-- End page content -->
     </div>
 </section>
