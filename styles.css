@@ -2,3 +2,11 @@
   background-color: #159957;
   background-image: linear-gradient(120deg, #155799, #159957);
 }
+
+.image-mid {
+  width: 50%;
+}
+.center {
+  margin-left: 25%;
+  margin-right: 25%;
+}
