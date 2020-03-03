@@ -55,22 +55,31 @@
               <span>Data</span>
             </a>
 
-            <a class="navbar-item" href="../about.html" title="About">
-              <span class="icon"><i class="fas fa-info-circle"></i></span>
-              <span>About</span>
-            </a>
             <div class="navbar-item has-dropdown is-hoverable">
               <a class="navbar-link">
                 Prototypes
               </a>
 
               <div class="navbar-dropdown">
-                <a class="navbar-item" href="./prototypes/nick.html">
+                <a class="navbar-item" href="nick.html">
                   <span class="icon"><i class="fas fa-chart-line"></i></span>
                   <span>Trends of Number of Called Deemed "Life Threatening"</span>
                 </a>
+                <a class="navbar-item" href="drew.html" title="Drew">
+                  <span class="icon"><i class="far fa-caret-square-down"></i></span>
+                  <span>Call Type Group Trends for Each Neighborhood</span>
+                </a>
+                <a class="navbar-item" href="angela.html" title="Angela">
+                  <span class="icon"><i class="far fa-caret-square-down"></i></span>
+                  <span>TODO</span>
+                </a>
               </div>
             </div>
+
+            <a class="navbar-item" href="../about.html" title="About">
+              <span class="icon"><i class="fas fa-info-circle"></i></span>
+              <span>About</span>
+            </a>
           </div>
         </div>
       </div>
@@ -111,4 +120,54 @@
   <!-- End page content -->
 </div>
 </section>
+
+<!-- Page footer -->
+<!-- https://bulma.io/documentation/layout/footer/ -->
+<footer class="footer">
+    <div class="content has-text-centered is-size-7">
+        <p>
+            <a href="#top">
+                <span class="fas fa-arrow-up"></span>
+                <span class="has-text-weight-medium">Back to Top</span>
+            </a>
+        </p>
+
+        <p>
+            <a href="https://github.com/usf-cs360-spring2020/midterm-enigma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+                <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+            </a>
+
+            <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+                <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+            </a>
+
+            <a href="https://bulma.io" class="button is-small">
+                <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+            </a>
+        </p>
+    </div>
+</footer>
+<!-- End page footer -->
+
+<!-- Mobile menu responsiveness -->
+<!-- https://bulma.io/documentation/components/navbar/ -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    if ($navbarBurgers.length > 0) {
+      $navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+          el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+        });
+      });
+    }
+  });
+</script>
+<!-- End mobile menu responsiveness -->
 </body>
+
+</html>
