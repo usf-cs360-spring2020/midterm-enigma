@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>Multi Line Chart</title>
+<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<style></style>
+</head>
+<body>
+<div id="container" class="svg-container"></div>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 100, right: 20, bottom: 30, left: 100},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]).nice();
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the 1st line
+var valueline1 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.bayview); });
+
+// define the 2nd line
+var valueline2 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.castro); });
+
+var valueline3 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.chinatown); });
+
+var valueline4 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.excelsior); });
+
+var valueline5 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.fidi); });
+
+var valueline6 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.mission); });
+
+var valueline7 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.pac); });
+
+var valueline8 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.soma); });
+
+var valueline9 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.tenderloin); });
+
+var valueline10 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.western_addition); });
+
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("nick_data_year.csv").then(function(data) {
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.year; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return 25000; })]);
+
+  // Add the valueline1 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline1);
+
+  // Add the valueline2 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "red")
+      .attr("d", valueline2);
+
+      // Add the valueline3 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "green")
+      .attr("d", valueline3);
+
+  // Add the valueline4 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "orange")
+      .attr("d", valueline4);
+
+  // Add the valueline5 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "turquoise")
+      .attr("d", valueline5);
+
+  // Add the valueline6 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "black")
+      .attr("d", valueline6);
+
+
+  // Add the valueline7 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "yellow")
+      .attr("d", valueline7);
+
+  // Add the valueline8 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "pink")
+      .attr("d", valueline8);
+
+  // Add the valueline9 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "grey")
+      .attr("d", valueline9);
+
+  // Add the valueline10 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "red")
+      .attr("d", valueline10);
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickSize(10));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y).ticks(5).tickSize(10));
+
+  // add the labels
+  svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width - 350)
+    .attr("y", 0)
+    .text("Call Year");
+
+  svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", 10)
+    .attr("x", 0)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Number of Records");
+
+// focus stuff for interaction
+var focus = svg.append("g")
+  .attr("class", "focus")
+  .style("display", "none");
+
+focus.append("line").attr("class", "lineHover")
+  .style("stroke", "#999")
+  .attr("stroke-width", 1)
+  .style("shape-rendering", "crispEdges")
+  .style("opacity", 0.5)
+  .attr("y1", -height)
+  .attr("y2",0);
+
+focus.append("text").attr("class", "lineHoverDate")
+  .attr("text-anchor", "middle")
+  .attr("font-size", 12);
+
+var overlay = svg.append("rect")
+  .attr("class", "overlay")
+  .attr("x", margin.left)
+  .attr("width", width - margin.right - margin.left)
+  .attr("height", height)
+
+// ============== interactive stuff ==================== //
+  function tooltip(copy) {
+
+		var labels = focus.selectAll(".lineHoverText")
+			.data(copy)
+
+		labels.enter().append("text")
+			.attr("class", "lineHoverText")
+			.style("fill", d => z(d))
+			.attr("text-anchor", "start")
+			.attr("font-size",12)
+			.attr("dy", (_, i) => 1 + i * 2 + "em")
+			.merge(labels);
+
+		var circles = focus.selectAll(".hoverCircle")
+			.data(copy)
+
+		circles.enter().append("circle")
+			.attr("class", "hoverCircle")
+			.style("fill", d => z(d))
+			.attr("r", 2.5)
+			.merge(circles);
+
+		svg.selectAll(".overlay")
+			.on("mouseover", function() { focus.style("display", null); })
+			.on("mouseout", function() { focus.style("display", "none"); })
+			.on("mousemove", mousemove);
+
+  		function mousemove() {
+  			var x0 = x.invert(d3.mouse(this)[0]),
+  				i = bisectDate(data, x0, 1),
+  				d0 = data[i - 1],
+  				d1 = data[i],
+  				d = x0 - d0.year > d1.year - x0 ? d1 : d0;
+
+  			focus.select(".lineHover")
+  				.attr("transform", "translate(" + x(d.year) + "," + height + ")");
+
+  			focus.select(".lineHoverDate")
+  				.attr("transform",
+  					"translate(" + x(d.year) + "," + (height + margin.bottom) + ")")
+  				.text(formatDate(d.year));
+
+  			focus.selectAll(".hoverCircle")
+  				.attr("cy", e => y(d[e]))
+  				.attr("cx", x(d.year));
+
+  			focus.selectAll(".lineHoverText")
+  				.attr("transform",
+  					"translate(" + (x(d.year)) + "," + height / 2.5 + ")")
+  				.text(e => e + " " + "º" + formatValue(d[e]));
+
+  			x(d.date) > (width - width / 4)
+  				? focus.selectAll("text.lineHoverText")
+  					.attr("text-anchor", "end")
+  					.attr("dx", -10)
+  				: focus.selectAll("text.lineHoverText")
+  					.attr("text-anchor", "start")
+  					.attr("dx", 10)
+  		}
+  }
+});
+
+</script>
+<style> /* set the CSS */
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.overlay {
+	fill: none;
+	pointer-events: all;
+}
+.lineHoverText {
+	text-shadow:
+	-2px -2px 0 #fff,
+	2px -2px 0 #fff,
+	-2px 2px 0 #fff,
+	2px 2px 0 #fff;
+}
+.hoverCircle {
+	opacity: .75;
+}
+
+</style>
+</body>
