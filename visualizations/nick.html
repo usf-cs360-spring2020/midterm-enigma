@@ -16,6 +16,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <!-- D3 -->
     <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 </head>
 
 <body>
@@ -137,7 +138,7 @@
 
 // set the dimensions and margins of the graph
 var margin = {top: 100, right: 20, bottom: 30, left: 100},
-    width = 960 - margin.left - margin.right,
+    width = 1060 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 // Define the div for the tooltip
@@ -146,7 +147,7 @@ var div = d3.select("body").append("div")
     .style("opacity", 0);
 
 // set the ranges
-var x = d3.scaleTime().range([0, width]).nice();
+var x = d3.scaleTime().range([0, width - 200]).nice();
 var y = d3.scaleLinear().range([height, 0]);
 
 // define the 1st line
@@ -197,7 +198,7 @@ var valueline10 = d3.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
@@ -209,10 +210,12 @@ d3.csv("nick_data_year.csv").then(function(data) {
   y.domain([0, d3.max(data, function(d) {
 	  return 25000; })]);
 
+
   // Add the valueline1 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
+      .attr("class", "line active")
+      .style("stroke", "grey")
       .attr("d", valueline1)
       .on("mouseover", function(d) {
             div.transition()
@@ -224,12 +227,15 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
   // Add the valueline2 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
-      .style("stroke", "red")
+      .attr("class", "line active")
+      .style("stroke", "purple")
       .attr("d", valueline2)
       .on("mouseover", function(d) {
             div.transition()
@@ -241,12 +247,15 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
       // Add the valueline3 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
+      .attr("class", "line active")
       .style("stroke", "green")
       .attr("d", valueline3)
       .on("mouseover", function(d) {
@@ -259,12 +268,15 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
   // Add the valueline4 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
+      .attr("class", "line active")
       .style("stroke", "orange")
       .attr("d", valueline4)
       .on("mouseover", function(d) {
@@ -277,12 +289,15 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
   // Add the valueline5 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
+      .attr("class", "line active")
       .style("stroke", "turquoise")
       .attr("d", valueline5)
       .on("mouseover", function(d) {
@@ -295,12 +310,15 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
   // Add the valueline6 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
+      .attr("class", "line active")
       .style("stroke", "black")
       .attr("d", valueline6)
       .on("mouseover", function(d) {
@@ -313,13 +331,16 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
 
   // Add the valueline7 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
+      .attr("class", "line active")
       .style("stroke", "yellow")
       .attr("d", valueline7)
       .on("mouseover", function(d) {
@@ -332,12 +353,15 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
   // Add the valueline8 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
+      .attr("class", "line active")
       .style("stroke", "pink")
       .attr("d", valueline8)
       .on("mouseover", function(d) {
@@ -350,13 +374,16 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
   // Add the valueline9 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
-      .style("stroke", "grey")
+      .attr("class", "line active")
+      .style("stroke", "red")
       .attr("d", valueline9)
       .on("mouseover", function(d) {
             div.transition()
@@ -365,16 +392,18 @@ d3.csv("nick_data_year.csv").then(function(data) {
               .style("left", (event.clientX) + "px")
               .style("top", (event.clientY + 500) + "px");
             })
-            .on("mouseout", function(d) {
-              div.transition()
-                    .style("opacity", 0);
-            });
-
+        .on("mouseout", function(d) {
+          div.transition()
+              .style("opacity", 0);
+        })
+        .on("click", function() {
+          toggleLines(this);
+        });
   // Add the valueline10 path.
   svg.append("path")
       .data([data])
-      .attr("class", "line")
-      .style("stroke", "red")
+      .attr("class", "line active")
+      .style("stroke", "lime")
       .attr("d", valueline10)
       .on("mouseover", function(d) {
             div.transition()
@@ -386,12 +415,31 @@ d3.csv("nick_data_year.csv").then(function(data) {
             .on("mouseout", function(d) {
                 div.transition()
                     .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
             });
 
+  // get the class names
+  let lines = document.getElementsByClassName("line");
   // Add the X Axis
+
+  let neighborhoods = ["Bayview", "Castro", "Chinatown", "Excelsior", "Financial District", "Mission", "Pacific Heights", "South of Market", "Tenderloin", "Western Addition"]
+
+
+  function toggleLines(d) {
+    if (d.classList.contains("active")) {
+      d.classList.remove("active");
+      d.classList.add("inactive");
+    } else {
+      d.classList.add("active");
+      d.classList.remove("inactive");
+    }
+  }
+
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickSize(10));
+      .call(d3.axisBottom(x).tickSize(20));
 
   // Add the Y Axis
   svg.append("g")
@@ -401,7 +449,7 @@ d3.csv("nick_data_year.csv").then(function(data) {
   svg.append("text")
     .attr("class", "x label")
     .attr("text-anchor", "end")
-    .attr("x", width - 350)
+    .attr("x", width - 550)
     .attr("y", 0)
     .text("Call Year");
 
@@ -413,8 +461,29 @@ d3.csv("nick_data_year.csv").then(function(data) {
     .attr("dy", ".75em")
     .attr("transform", "rotate(-90)")
     .text("Number of Records");
-});
 
+    // add legend
+
+    svg.append("g")
+      .attr("class", "legendOrdinal")
+      .attr("transform", "translate(800, 0)")
+      .attr()
+
+    var ordinal = d3.scaleOrdinal()
+      .domain(neighborhoods)
+      .range([ "grey", "purple", "green", "orange", "turquoise", "black", "yellow", "pink", "red", "lime"]);
+
+    var legendOrdinal = d3.legendColor()
+      .shape("path", d3.symbol().size(150)())
+      .shapePadding(10)
+      //use cellFilter to hide the "e" cell
+      .cellFilter(function(d){ return d.label !== "e" })
+      .scale(ordinal)
+
+
+      svg.select(".legendOrdinal")
+      .call(legendOrdinal);
+      });
 </script>
 <style> /* set the CSS */
 
@@ -452,6 +521,17 @@ div.tooltip {
     border-radius: 8px;
     border-color: black;
     pointer-events: none;
+}
+g.legendOrdinal {
+  position: absolute;
+  top:200px;
+  left: 800px;
+}
+.inactive {
+  opacity: 0.2;
+}
+.active {
+  opacity: 1!important;
 }
 
 </style>
