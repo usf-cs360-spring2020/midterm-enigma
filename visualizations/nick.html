@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- TODO: Change title -->
+    <title>Multi Line Chart</title>
+
+    <!-- Load Bulma from CDN (consider saving it to repository instead) -->
+    <!-- https://bulma.io/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="../styles.css">
+
+    <!-- Load Font Awesome 5 (free) icons -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <!-- D3 -->
+    <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+</head>
+
+<body>
+
+<!-- Page header -->
+<!-- https://bulma.io/documentation/layout/hero/ -->
+<section class="hero is-primary is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">Multi Line Chart</h1>
+        </div>
+    </div>
+</section>
+<!-- End page header -->
+
+
+<!-- Page navigation -->
+<!-- https://bulma.io/documentation/components/navbar/ -->
+<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <!-- TODO: Change link to repository homepage if needed -->
+            <!-- TODO: Change which navbar-item is-active if needed -->
+            <a class="navbar-item is-active" href="index.html">
+                <span class="icon"><i class="fas fa-home"></i></span>
+                <span>Home</span>
+            </a>
+
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+               data-target="main-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="main-menu" class="navbar-menu has-text-weight-medium">
+            <!-- Left navbar items -->
+            <div class="navbar-start">
+                <a class="navbar-item" href="dataset.html" title="Data">
+                    <span class="icon"><i class="fas fa-table"></i></span>
+                    <span>Data</span>
+                </a>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        Prototypes
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="./prototypes/nick.html">
+                            <span class="icon"><i class="fas fa-chart-line"></i></span>
+                            <span>Trends of Number of Calls Deemed "Life Threatening"</span>
+                        </a>
+                        <a class="navbar-item" href="./prototypes/drew.html" title="Drew">
+                            <span class="icon"><i class="far fa-caret-square-down"></i></span>
+                            <span>Call Type Group Trends for Each Neighborhood</span>
+                        </a>
+                        <a class="navbar-item" href="./prototypes/angela.html" title="Angela">
+                            <span class="icon"><i class="fas fa-chart-area"></i></span>
+                            <span>Emergency Fire Response Across Neighborhoods</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        Visualizations
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="./prototypes/nick.html">
+                            <span class="icon"><i class="fas fa-chart-line"></i></span>
+                            <span>Trends of Number of Calls Deemed "Life Threatening"</span>
+                        </a>
+                        <a class="navbar-item" href="./visualizations/call_type_trends_visualization.html" title="Drew">
+                            <span class="icon"><i class="far fa-caret-square-down"></i></span>
+                            <span>Call Type Group Trends for Each Neighborhood</span>
+                        </a>
+                        <a class="navbar-item" href="./prototypes/angela.html" title="Angela">
+                            <span class="icon"><i class="fas fa-chart-area"></i></span>
+                            <span>Emergency Fire Response Across Neighborhoods</span>
+                        </a>
+                    </div>
+                </div>
+
+                <a class="navbar-item" href="about.html" title="About">
+                    <span class="icon"><i class="fas fa-info-circle"></i></span>
+                    <span>About</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- End page navigation -->
+<section class="section">
+  <div class="container">
+    <div class="content">
+      <h2>Data Wrangling</h2>
+      <p>
+      Data was wrangled first prior to download, through the editor provided on the data provider's website. There, we were able to filter to download only the calls that were part of the call group "Life-Threatening", and only download data between the years of 2013 and 2019.
+      That data was then wrangled in Excel, where we removed unecessary columns.
+      Finally, additional filtering, namely excluding all but the top 8 neighborhoods in terms of number of life-threatening calls, was done through Javascript.
+      </p>
+      <h2>Visualization</h2>
+      <p>
+      This visualization shows the number of calls deemed life-threatening from 2013 to 2019, per neighborhood, for the 8 neighborhoods with the most number of such calls.
+      The number of neighborhoods is reduced from 15 to 8, compared to our prototype, because the 7 removed neighborhoods showed similar trends and only made the visualization more crowded.
+      The x-axis indicates the time period by year, while the y-axis indicates the number of calls for each year. Since this is broken down by neighborhood, each neighborhood is colored, and the color is indicated in the legend that accompanies the chart.
+      There is clearly an upward trend in terms of calles deemed life-threatening in most of the neighborhoods indicated in the chart.
+      This may in part be because of an increase in population year over year, so we can not necessarily conclude that there's an increase in calls per person. However, considering some of the neighborhoods included in this visualization have increases of 50% (Tenderloin, Bayview/Hunter's Point) to 75% (South of Market), it's likely these increases in life-threatening calls are not only because of an increase in population.
+    </p>
+  </div>
+<div id="container" class="svg-container"></div>
+</div>
+</section>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 100, right: 20, bottom: 30, left: 100},
+    width = 1060 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// Define the div for the tooltip
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+// set the ranges
+var x = d3.scaleTime().range([0, width - 200]).nice();
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the 1st line
+var valueline1 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.bayview); });
+
+// define the 2nd line
+var valueline2 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.castro); });
+
+var valueline3 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.chinatown); });
+
+var valueline4 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.excelsior); });
+
+var valueline5 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.fidi); });
+
+var valueline6 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.mission); });
+
+var valueline7 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.pac); });
+
+var valueline8 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.soma); });
+
+var valueline9 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.tenderloin); });
+
+var valueline10 = d3.line()
+.x(function(d) { return x(d.year); })
+.y(function(d) { return y(d.western_addition); });
+
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("nick_data_year.csv").then(function(data) {
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.year; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return 25000; })]);
+
+
+  // Add the valueline1 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "grey")
+      .attr("d", valueline1)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Bayview")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+  // Add the valueline2 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "purple")
+      .attr("d", valueline2)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Castro")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+      // Add the valueline3 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "green")
+      .attr("d", valueline3)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Chinatown")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+  // Add the valueline4 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "orange")
+      .attr("d", valueline4)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Excelsior")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+  // Add the valueline5 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "turquoise")
+      .attr("d", valueline5)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Financial District")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+  // Add the valueline6 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "black")
+      .attr("d", valueline6)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Mission")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+
+  // Add the valueline7 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "yellow")
+      .attr("d", valueline7)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Pacific Heights")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+  // Add the valueline8 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "pink")
+      .attr("d", valueline8)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("South of Market")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+  // Add the valueline9 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "red")
+      .attr("d", valueline9)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Tenderloin")
+              .style("left", (event.clientX) + "px")
+              .style("top", (event.clientY + 500) + "px");
+            })
+        .on("mouseout", function(d) {
+          div.transition()
+              .style("opacity", 0);
+        })
+        .on("click", function() {
+          toggleLines(this);
+        });
+  // Add the valueline10 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line active")
+      .style("stroke", "lime")
+      .attr("d", valueline10)
+      .on("mouseover", function(d) {
+            div.transition()
+                .style("opacity", .9);
+            div	.html("Western Addition")
+            .style("left", (event.clientX) + "px")
+            .style("top", (event.clientY + 500) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .style("opacity", 0);
+            })
+            .on("click", function() {
+              toggleLines(this);
+            });
+
+  // get the class names
+  let lines = document.getElementsByClassName("line");
+  // Add the X Axis
+
+  let neighborhoods = ["Bayview", "Castro", "Chinatown", "Excelsior", "Financial District", "Mission", "Pacific Heights", "South of Market", "Tenderloin", "Western Addition"]
+
+
+  function toggleLines(d) {
+    if (d.classList.contains("active")) {
+      d.classList.remove("active");
+      d.classList.add("inactive");
+    } else {
+      d.classList.add("active");
+      d.classList.remove("inactive");
+    }
+  }
+
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickSize(20));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y).ticks(5).tickSize(10));
+
+  // add the labels
+  svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width - 550)
+    .attr("y", 0)
+    .text("Call Year");
+
+  svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", -70)
+    .attr("x", -100)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Number of Records");
+
+    // add legend
+
+    svg.append("g")
+      .attr("class", "legendOrdinal")
+      .attr("transform", "translate(800, 0)")
+      .attr()
+
+    var ordinal = d3.scaleOrdinal()
+      .domain(neighborhoods)
+      .range([ "grey", "purple", "green", "orange", "turquoise", "black", "yellow", "pink", "red", "lime"]);
+
+    var legendOrdinal = d3.legendColor()
+      .shape("path", d3.symbol().size(150)())
+      .shapePadding(10)
+      //use cellFilter to hide the "e" cell
+      .cellFilter(function(d){ return d.label !== "e" })
+      .scale(ordinal)
+
+
+      svg.select(".legendOrdinal")
+      .call(legendOrdinal);
+      });
+</script>
+<style> /* set the CSS */
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 4px;
+  padding: 10px 10px;
+}
+
+.overlay {
+	fill: none;
+	pointer-events: all;
+}
+.lineHoverText {
+	text-shadow:
+	-2px -2px 0 #fff,
+	2px -2px 0 #fff,
+	-2px 2px 0 #fff,
+	2px 2px 0 #fff;
+}
+.hoverCircle {
+	opacity: .75;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 100px;
+    height: 50px;
+    padding: 2px;
+    font: 16px sans-serif;
+    border: 0px black;
+    background: #ffffff;
+    border-radius: 8px;
+    border-color: black;
+    pointer-events: none;
+}
+g.legendOrdinal {
+  position: absolute;
+  top:200px;
+  left: 800px;
+}
+.inactive {
+  opacity: 0.2;
+}
+.active {
+  opacity: 1!important;
+}
+
+</style>
+</body>
