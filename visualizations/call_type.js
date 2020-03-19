@@ -17,7 +17,7 @@ const columns = {
 const ctg = {
   FIRE: 'Fire',
   ALARM: 'Alarm',
-  NON_LIFE_THREATENING: 'Non Life-Threatening',
+  NON_LIFE_THREATENING: 'Non Life-threatening',
   POTENTIALLY_LIFE_THREATENING: 'Potentially Life-Threatening',
 };
 
@@ -78,32 +78,38 @@ function aggregate(data) {
     if(neighborhood !== 'None') {
       let group = d[columns.CTG];
 
-      if (h_map.has(neighborhood)) {
-        let groups = h_map.get(neighborhood);
-        let callTypeCount = groups[group];
+      if(group !== '') {
+        if (h_map.has(neighborhood)) {
+          let groups = h_map.get(neighborhood);
+          let callTypeCount = groups[group];
 
-        groups[group] = callTypeCount + 1;
+          groups[group] = callTypeCount + 1;
+        } else {
+          let groups = {
+            [ctg.FIRE]: 0,
+            [ctg.ALARM]: 0,
+            [ctg.NON_LIFE_THREATENING]: 0,
+            [ctg.POTENTIALLY_LIFE_THREATENING]: 0,
+          };
 
-      } else {
-        let groups = {
-          [ctg.FIRE]: 0,
-          [ctg.ALARM]: 0,
-          [ctg.NON_LIFE_THREATENING]: 0,
-          [ctg.POTENTIALLY_LIFE_THREATENING]: 0,
-        };
+          groups[group] = 1;
 
-        groups[group] = 1;
-
-        h_map.set(neighborhood, groups);
+          h_map.set(neighborhood, groups);
+        }
       }
     }
   });
 
   // Average all counts over the course of <yearRange> years
-  h_map.each((k, v) => {
-    Object.entries(v).forEach(entry => {
-      entry[1] = entry[1] / yearRange;
+  h_map.each((ctg, n) => {
+    // let avgCount;
+    Object.entries(ctg).forEach(entry => {
+      console.log(entry);
+      ctg[entry[0]] = Math.round(entry[1] / yearRange);
+      // console.log(entry);
     });
+    // console.log(n);
+    console.log(ctg);
   });
 
   console.log(h_map);
