@@ -362,7 +362,7 @@ d3.csv("nick_data_year.csv").then(function(data) {
   svg.append("path")
       .data([data])
       .attr("class", "line active")
-      .style("stroke", "pink")
+      .style("stroke", "gold")
       .attr("d", valueline8)
       .on("mouseover", function(d) {
             div.transition()
@@ -439,10 +439,11 @@ d3.csv("nick_data_year.csv").then(function(data) {
 
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickSize(20));
+      .call(d3.axisBottom(x).tickSize(20).tickFormat(d3.format("20", " ")));
 
   // Add the Y Axis
   svg.append("g")
+
       .call(d3.axisLeft(y).ticks(5).tickSize(10));
 
   // add the labels
@@ -471,7 +472,7 @@ d3.csv("nick_data_year.csv").then(function(data) {
 
     var ordinal = d3.scaleOrdinal()
       .domain(neighborhoods)
-      .range([ "grey", "purple", "green", "orange", "turquoise", "black", "yellow", "pink", "red", "lime"]);
+      .range([ "grey", "purple", "green", "orange", "turquoise", "black", "yellow", "gold", "red", "lime"]);
 
     var legendOrdinal = d3.legendColor()
       .shape("path", d3.symbol().size(150)())
