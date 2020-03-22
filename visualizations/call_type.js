@@ -5,7 +5,7 @@ const h_cellWidth = 149;
 const h_cellHeight = 12;
 
 const h_margin = {
-  top: 35,
+  top: 80,
   bottom: 5,
   left: 190,
   right: 15
@@ -43,11 +43,10 @@ function priorityString(priority) {
   return priority === 2 ? priorityStrings.NON_EMERGENCY : priorityStrings.EMERGENCY;
 }
 
-let colorBuckets = [100, 500, 1000, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000];
-let colors = ['#FCFED2', '#E6F5B6', '#D6EFB3', '#C9EAB4',
-              '#BDE5B5', '#A9DDB7', '#8ED3BA','#77CABD',
-              '#4CB7C1', '#228ABB', '#2071B1', '#2355A3',
-              '#1F358B', '#142772', '#0B1F5E'];
+let colorBuckets = [100, 500, 1000, 4000, 8000, 12000, 16000, 20000, 24000];
+let colors = ['#FCFED2', '#D6EFB3', '#BDE5B5',
+              '#A9DDB7','#77CABD', '#228ABB',
+              '#2355A3', '#1F358B', '#0B1F5E'];
 
 let getColor = value => {
   for(let i = 0; i < colorBuckets.length; i++) {
@@ -147,7 +146,7 @@ function drawTitles() {
                     .text(columns.CTG);
 
   xTitle.attr('x', xMiddle)
-        .attr('y', h_margin.top/2)
+        .attr('y', h_margin.top/1.25)
         .attr('dy', -4)
         .attr('text-anchor', 'middle')
         .attr('font-size', '14');
@@ -165,6 +164,41 @@ function drawTitles() {
         .attr('text-decoration', 'underline');
 }
 
+function drawLegend() {
+  const boxWidth = 50;
+  const legendWidth = 200;
+  const legendHeight = 20;
+
+  const start = -300;
+  let offset = boxWidth;
+
+  // place legend in its own group
+  const group = svg.append('g')
+                   .attr('id', 'color-legend')
+                   .attr('transform', translate(h_width - h_margin.right - legendWidth, 10));
+
+  group.append('text')
+       .attr('class', 'axis-title')
+       .text('Average Calls Per Year');
+
+  for(let i = 0; i < colorBuckets.length; i++) {
+    let color = i < colorBuckets.length - 3 ? 'black' : 'white';
+    group.append('rect')
+         .attr('y', 15)
+         .attr('x', start + offset + (boxWidth * i))
+         .attr('width', boxWidth)
+         .attr('height', legendHeight)
+         .attr('fill', colors[i]);
+
+    group.append('text')
+         .attr('class', 'text')
+         .text('<' + colorBuckets[i])
+         .attr('fill', color)
+         .attr('dy', 30)
+         .attr('dx', start + offset + (boxWidth * i));
+  }
+}
+
 /*
  * calculates the midpoint of a range given as a 2 element array
  */
@@ -177,6 +211,7 @@ function draw(data) {
 
   drawAxis();
   drawTitles();
+  drawLegend();
 
   const group = plot.append('g')
                     .attr('id', 'heatmap');
