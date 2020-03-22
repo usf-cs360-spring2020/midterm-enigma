@@ -1,7 +1,7 @@
 const h_width = 750;
 const h_height = 500;
 
-const h_cellWidth = 141;
+const h_cellWidth = 147;
 const h_cellHeight = 11;
 
 const h_margin = {
@@ -88,7 +88,7 @@ const scales = {
 
 scales.x.range([0, h_width - h_margin.left - h_margin.right])
         .domain(callTypeGroups)
-        .paddingInner(0.05);
+        .paddingInner(0);
 
 const h_data = [];
 const p_data = [];
