@@ -167,7 +167,7 @@ function drawTitles() {
 function drawLegend() {
   const boxWidth = 50;
   const legendWidth = 200;
-  const legendHeight = 20;
+  const legendHeight = 10;
 
   const start = -300;
   let offset = boxWidth;
@@ -179,12 +179,12 @@ function drawLegend() {
 
   group.append('text')
        .attr('class', 'axis-title')
-       .text('Average Calls Per Year');
+       .text('Average Calls Per Year')
+       .attr('dx', -75);
 
   for(let i = 0; i < colorBuckets.length; i++) {
-    let color = i < colorBuckets.length - 3 ? 'black' : 'white';
     group.append('rect')
-         .attr('y', 15)
+         .attr('y', 5)
          .attr('x', start + offset + (boxWidth * i))
          .attr('width', boxWidth)
          .attr('height', legendHeight)
@@ -193,8 +193,7 @@ function drawLegend() {
     group.append('text')
          .attr('class', 'text')
          .text('<' + colorBuckets[i])
-         .attr('fill', color)
-         .attr('dy', 30)
+         .attr('dy', 26)
          .attr('dx', start + offset + (boxWidth * i));
   }
 }
