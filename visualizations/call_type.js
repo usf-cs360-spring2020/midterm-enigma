@@ -2,11 +2,11 @@ const h_width = 800;
 const h_height = 500;
 
 const h_cellWidth = 149;
-const h_cellHeight = 11;
+const h_cellHeight = 12;
 
 const h_margin = {
-  top: 60,
-  bottom: 35,
+  top: 35,
+  bottom: 5,
   left: 190,
   right: 15
 };
@@ -43,9 +43,6 @@ function priorityString(priority) {
   return priority === 2 ? priorityStrings.NON_EMERGENCY : priorityStrings.EMERGENCY;
 }
 
-let myColor = d3.scaleSequential(d3.interpolateYlGnBu)
-                .domain([28, 23695]);
-
 let colorBuckets = [100, 500, 1000, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000];
 let colors = ['#FCFED2', '#E6F5B6', '#D6EFB3', '#C9EAB4',
               '#BDE5B5', '#A9DDB7', '#8ED3BA','#77CABD',
@@ -72,11 +69,6 @@ const plot = svg.append('g')
                 .attr('id', 'heatmap')
                 .attr('transform', translate(h_margin.left, h_margin.top));
 
-// const annotations = svg.append("g")
-//                        .attr("id", "annotation");
-//
-// const tooltip = svg.append("g")
-//                        .attr("id", "tooltip");
 /*
  * returns a translate string for the transform attribute
  */
@@ -218,6 +210,42 @@ function draw(data) {
          let h = h_cellHeight;
          console.log(h);
          return h;
+       })
+       .on("mouseover.tooltip", d => {
+         let div = d3.select("body")
+                     .append("div");
+
+         div.attr("id", "details")
+            .attr("class", "tooltip")
+            .transition();
+
+
+         let rows = div.append("table")
+                       .selectAll("tr")
+                       .data([columns.NEIGHBORHOODS, ctg.FIRE])
+                       // .data(Object.keys(d))
+                       .enter()
+                       .append("tr");
+
+         rows.append("th").text(key => key);
+         rows.append("td").text(key => d[key]);
+       })
+       .on("mousemove.tooltip", d => {
+         let div = d3.select("div#details");
+
+         // get height of tooltip
+         let bbox = div.node().getBoundingClientRect();
+
+         // Get mouse position relative to the page
+         div.style("left", d3.event.pageX + "px");
+         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+       })
+       .on("mouseout.tooltip", d => {
+         d3.selectAll("div")
+           .transition();
+
+         d3.selectAll("div#details")
+           .remove();
        });
 
   // Alarm
@@ -250,6 +278,42 @@ function draw(data) {
          let h = h_cellHeight;
          // console.log(h);
          return h;
+       })
+       .on("mouseover.tooltip", d => {
+         let div = d3.select("body")
+                     .append("div");
+
+         div.attr("id", "details")
+            .attr("class", "tooltip")
+            .transition();
+
+
+         let rows = div.append("table")
+                       .selectAll("tr")
+                       .data([columns.NEIGHBORHOODS, ctg.ALARM])
+                       // .data(Object.keys(d))
+                       .enter()
+                       .append("tr");
+
+         rows.append("th").text(key => key);
+         rows.append("td").text(key => d[key]);
+       })
+       .on("mousemove.tooltip", d => {
+         let div = d3.select("div#details");
+
+         // get height of tooltip
+         let bbox = div.node().getBoundingClientRect();
+
+         // Get mouse position relative to the page
+         div.style("left", d3.event.pageX + "px");
+         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+       })
+       .on("mouseout.tooltip", d => {
+         d3.selectAll("div")
+           .transition();
+
+         d3.selectAll("div#details")
+           .remove();
        });
 
   // NON_LIFE_THREATENING
@@ -282,6 +346,42 @@ function draw(data) {
          let h = h_cellHeight;
          // console.log(h);
          return h;
+       })
+       .on("mouseover.tooltip", d => {
+         let div = d3.select("body")
+                     .append("div");
+
+         div.attr("id", "details")
+            .attr("class", "tooltip")
+            .transition();
+
+
+         let rows = div.append("table")
+                       .selectAll("tr")
+                       .data([columns.NEIGHBORHOODS, ctg.NON_LIFE_THREATENING])
+                       // .data(Object.keys(d))
+                       .enter()
+                       .append("tr");
+
+         rows.append("th").text(key => key);
+         rows.append("td").text(key => d[key]);
+       })
+       .on("mousemove.tooltip", d => {
+         let div = d3.select("div#details");
+
+         // get height of tooltip
+         let bbox = div.node().getBoundingClientRect();
+
+         // Get mouse position relative to the page
+         div.style("left", d3.event.pageX + "px");
+         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+       })
+       .on("mouseout.tooltip", d => {
+         d3.selectAll("div")
+           .transition();
+
+         d3.selectAll("div#details")
+           .remove();
        });
 
   // POTENTIALLY_LIFE_THREATENING
@@ -315,7 +415,6 @@ function draw(data) {
          return h;
        })
        .on("mouseover.tooltip", d => {
-         let me = d3.select(this);
          let div = d3.select("body")
                      .append("div");
 
@@ -323,9 +422,11 @@ function draw(data) {
             .attr("class", "tooltip")
             .transition();
 
+
          let rows = div.append("table")
                        .selectAll("tr")
-                       .data(Object.keys(d))
+                       .data([columns.NEIGHBORHOODS, ctg.POTENTIALLY_LIFE_THREATENING])
+                       // .data(Object.keys(d))
                        .enter()
                        .append("tr");
 
@@ -426,45 +527,10 @@ function aggregate(data) {
     p_data.push(newEntry);
   });
 
-  scales.y.range([h_height - h_margin.top - h_margin.bottom, 0])
+  scales.y.range([h_height - h_margin.top, 0])
         .domain(neighborhoods)
-        .paddingInner(0.05);
+        .paddingOuter(0.1);
 
-  // console.log(h_map);
-  // console.log(p_map);
-  // console.log(neighborhoods);
   console.log(h_data);
   console.log(p_data);
-}
-
-function drawHover() {
-  // let vis = svg.node();
-  // let annotations = svg.append("g")
-  //                      .attr("id", "annotation");
-  //
-  // let cells = d3.select(vis)
-  //               .select("#heatmap")
-  //               .selectAll("cell");
-  //
-  // cells.on("mouseover.hover1", function(d) {
-  //   let me = d3.select(this);
-  //
-  //   annotations.insert("text")
-  //              .attr("id", "label")
-  //              .attr("x", me.attr("cx"))
-  //              .attr("y", me.attr("cy"))
-  //              // .attr("dy", h_cellWidth/2)
-  //              .attr("text-anchor", "middle")
-  //              .text(d[columns.NEIGHBORHOODS]);
-  //
-  //   // show what we interacted with
-  //   // d3.select(status).text("hover: " + d[ctg.FIRE]);
-  //   console.log("hover: " + d[ctg.FIRE]);
-  // });
-  //
-  // cells.on("mouseout.hover1", function(d) {
-  //   annotations.select("text#label").remove();
-  //   // d3.select(status).text("hover: none");
-  //   console.log("hover: none");
-  // });
 }
