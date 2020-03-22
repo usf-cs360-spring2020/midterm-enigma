@@ -1,8 +1,8 @@
 const h_width = 750;
 const h_height = 500;
 
-const h_cellWidth = 150;
-const h_cellHeight = 50;
+const h_cellWidth = 141;
+const h_cellHeight = 11;
 
 const h_margin = {
   top: 30,
@@ -112,10 +112,73 @@ function convert(row) {
   return convert;
 }
 
-function draw(data) {
-  // console.log(data);
+function drawAxis() {
+  const xGroup = svg.append('g')
+                    .attr('id', 'x-axis')
+                    .attr('class', 'axis');
+  const yGroup = svg.append('g')
+                    .attr('id', 'y-axis')
+                    .attr('class', 'axis');
 
+
+  // create axis generators
+  const xAxis = d3.axisTop(scales.x);
+  const yAxis = d3.axisLeft(scales.y);
+
+  // https://github.com/d3/d3-format#locale_formatPrefix
+  xAxis.ticks(4, 's')
+       .tickSizeOuter(0)
+       .tickSizeInner(0);
+  yAxis.ticks(41)
+       .tickSizeInner(0)
+       .tickSizeOuter(0);
+
+  // shift x axis to correct location
+  xGroup.attr('transform', translate(h_margin.left, h_margin.top));
+  xGroup.call(xAxis);
+
+  // shift y axis to correct location
+  yGroup.attr('transform', translate(h_margin.left, h_margin.top))
+  yGroup.call(yAxis);
+
+  // const group = plot.append('g')
+  //                   .attr('id', 'heatmap');
+  //
+  // group.selectAll('cell')
+  //      .enter()
+  //
+  //      .append('rect')
+  //      .attr('fill', d => {
+  //        let color = getColor(d[ctg.NON_LIFE_THREATENING]);
+  //        // console.log(color);
+  //        return color;
+  //      })
+  //      .attr('x', d => {
+  //        let x = scales.x(ctg.NON_LIFE_THREATENING);
+  //        // console.log(x);
+  //        return x;
+  //      })
+  //      .attr('y', d => {
+  //        let y = scales.y(d[columns.NEIGHBORHOODS]);
+  //        // console.log(y);
+  //        return y;
+  //      })
+  //      .attr('width', d => {
+  //        let w = h_cellWidth;
+  //        // console.log(w);
+  //        return w;
+  //      })
+  //      .attr('height', d => {
+  //        let h = h_cellHeight;
+  //        // console.log(h);
+  //        return h;
+  //      });
+}
+
+function draw(data) {
   aggregate(data);
+
+  drawAxis();
 
   const group = plot.append('g')
                     .attr('id', 'heatmap');
