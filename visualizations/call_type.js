@@ -1,8 +1,8 @@
 const h_width = 800;
-const h_height = 500;
+const h_height = 600;
 
 const h_cellWidth = 149;
-const h_cellHeight = 12;
+const h_cellHeight = 13;
 
 const h_margin = {
   top: 80,
@@ -45,7 +45,7 @@ function priorityString(priority) {
 
 let colorBuckets = [100, 500, 1000, 4000, 8000, 12000, 16000, 20000, 24000];
 let colors = ['#FCFED2', '#D6EFB3', '#BDE5B5',
-              '#A9DDB7','#77CABD', '#228ABB',
+              '#a1d4ae','#77CABD', '#228ABB',
               '#2355A3', '#1F358B', '#0B1F5E'];
 
 let getColor = value => {
@@ -139,6 +139,19 @@ function drawAxis() {
  * draw axis titles
  */
 function drawTitles() {
+  svg.append('text')
+     .attr('class', 'main-title')
+     .text('Yearly Average Calls')
+     .attr('y', 20)
+     .style('font-size', '24px');
+
+  svg.append('text')
+     .attr('class', 'main-title')
+     .text('Per Neighborhood')
+     .attr('dx', 10)
+     .attr('y', 44)
+     .style('font-size', '24px');
+
   const xMiddle = h_margin.left + midpoint(scales.x.range());
 
   const xTitle = svg.append('text')
@@ -155,7 +168,7 @@ function drawTitles() {
 
   const yTitle = yGroup.append('text')
                        .attr('class', 'axis-title')
-                       .text("Neighborhoods");
+                       .text('Neighborhoods');
 
   yTitle.attr('x', 145)
         .attr('y', h_margin.top - 1)
@@ -245,40 +258,40 @@ function draw(data) {
          console.log(h);
          return h;
        })
-       .on("mouseover.tooltip", d => {
-         let div = d3.select("body")
-                     .append("div");
+       .on('mouseover.tooltip', d => {
+         let div = d3.select('body')
+                     .append('div');
 
-         div.attr("id", "details")
-            .attr("class", "tooltip")
+         div.attr('id', 'details')
+            .attr('class', 'tooltip')
             .transition();
 
 
-         let rows = div.append("table")
-                       .selectAll("tr")
+         let rows = div.append('table')
+                       .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.FIRE])
                        // .data(Object.keys(d))
                        .enter()
-                       .append("tr");
+                       .append('tr');
 
-         rows.append("th").text(key => key);
-         rows.append("td").text(key => d[key]);
+         rows.append('th').text(key => key);
+         rows.append('td').text(key => d[key]);
        })
-       .on("mousemove.tooltip", d => {
-         let div = d3.select("div#details");
+       .on('mousemove.tooltip', d => {
+         let div = d3.select('div#details');
 
          // get height of tooltip
          let bbox = div.node().getBoundingClientRect();
 
          // Get mouse position relative to the page
-         div.style("left", d3.event.pageX + "px");
-         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+         div.style('left', d3.event.pageX + 'px');
+         div.style('top',  (d3.event.pageY - bbox.height) + 'px');
        })
-       .on("mouseout.tooltip", d => {
-         d3.selectAll("div")
+       .on('mouseout.tooltip', d => {
+         d3.selectAll('div')
            .transition();
 
-         d3.selectAll("div#details")
+         d3.selectAll('div#details')
            .remove();
        });
 
@@ -313,40 +326,40 @@ function draw(data) {
          // console.log(h);
          return h;
        })
-       .on("mouseover.tooltip", d => {
-         let div = d3.select("body")
-                     .append("div");
+       .on('mouseover.tooltip', d => {
+         let div = d3.select('body')
+                     .append('div');
 
-         div.attr("id", "details")
-            .attr("class", "tooltip")
+         div.attr('id', 'details')
+            .attr('class', 'tooltip')
             .transition();
 
 
-         let rows = div.append("table")
-                       .selectAll("tr")
+         let rows = div.append('table')
+                       .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.ALARM])
                        // .data(Object.keys(d))
                        .enter()
-                       .append("tr");
+                       .append('tr');
 
-         rows.append("th").text(key => key);
-         rows.append("td").text(key => d[key]);
+         rows.append('th').text(key => key);
+         rows.append('td').text(key => d[key]);
        })
-       .on("mousemove.tooltip", d => {
-         let div = d3.select("div#details");
+       .on('mousemove.tooltip', d => {
+         let div = d3.select('div#details');
 
          // get height of tooltip
          let bbox = div.node().getBoundingClientRect();
 
          // Get mouse position relative to the page
-         div.style("left", d3.event.pageX + "px");
-         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+         div.style('left', d3.event.pageX + 'px');
+         div.style('top',  (d3.event.pageY - bbox.height) + 'px');
        })
-       .on("mouseout.tooltip", d => {
-         d3.selectAll("div")
+       .on('mouseout.tooltip', d => {
+         d3.selectAll('div')
            .transition();
 
-         d3.selectAll("div#details")
+         d3.selectAll('div#details')
            .remove();
        });
 
@@ -381,40 +394,40 @@ function draw(data) {
          // console.log(h);
          return h;
        })
-       .on("mouseover.tooltip", d => {
-         let div = d3.select("body")
-                     .append("div");
+       .on('mouseover.tooltip', d => {
+         let div = d3.select('body')
+                     .append('div');
 
-         div.attr("id", "details")
-            .attr("class", "tooltip")
+         div.attr('id', 'details')
+            .attr('class', 'tooltip')
             .transition();
 
 
-         let rows = div.append("table")
-                       .selectAll("tr")
+         let rows = div.append('table')
+                       .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.NON_LIFE_THREATENING])
                        // .data(Object.keys(d))
                        .enter()
-                       .append("tr");
+                       .append('tr');
 
-         rows.append("th").text(key => key);
-         rows.append("td").text(key => d[key]);
+         rows.append('th').text(key => key);
+         rows.append('td').text(key => d[key]);
        })
-       .on("mousemove.tooltip", d => {
-         let div = d3.select("div#details");
+       .on('mousemove.tooltip', d => {
+         let div = d3.select('div#details');
 
          // get height of tooltip
          let bbox = div.node().getBoundingClientRect();
 
          // Get mouse position relative to the page
-         div.style("left", d3.event.pageX + "px");
-         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+         div.style('left', d3.event.pageX + 'px');
+         div.style('top',  (d3.event.pageY - bbox.height) + 'px');
        })
-       .on("mouseout.tooltip", d => {
-         d3.selectAll("div")
+       .on('mouseout.tooltip', d => {
+         d3.selectAll('div')
            .transition();
 
-         d3.selectAll("div#details")
+         d3.selectAll('div#details')
            .remove();
        });
 
@@ -448,40 +461,40 @@ function draw(data) {
          // console.log(h);
          return h;
        })
-       .on("mouseover.tooltip", d => {
-         let div = d3.select("body")
-                     .append("div");
+       .on('mouseover.tooltip', d => {
+         let div = d3.select('body')
+                     .append('div');
 
-         div.attr("id", "details")
-            .attr("class", "tooltip")
+         div.attr('id', 'details')
+            .attr('class', 'tooltip')
             .transition();
 
 
-         let rows = div.append("table")
-                       .selectAll("tr")
+         let rows = div.append('table')
+                       .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.POTENTIALLY_LIFE_THREATENING])
                        // .data(Object.keys(d))
                        .enter()
-                       .append("tr");
+                       .append('tr');
 
-         rows.append("th").text(key => key);
-         rows.append("td").text(key => d[key]);
+         rows.append('th').text(key => key);
+         rows.append('td').text(key => d[key]);
        })
-       .on("mousemove.tooltip", d => {
-         let div = d3.select("div#details");
+       .on('mousemove.tooltip', d => {
+         let div = d3.select('div#details');
 
          // get height of tooltip
          let bbox = div.node().getBoundingClientRect();
 
          // Get mouse position relative to the page
-         div.style("left", d3.event.pageX + "px");
-         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+         div.style('left', d3.event.pageX + 'px');
+         div.style('top',  (d3.event.pageY - bbox.height) + 'px');
        })
-       .on("mouseout.tooltip", d => {
-         d3.selectAll("div")
+       .on('mouseout.tooltip', d => {
+         d3.selectAll('div')
            .transition();
 
-         d3.selectAll("div#details")
+         d3.selectAll('div#details')
            .remove();
        });
 
@@ -567,4 +580,32 @@ function aggregate(data) {
 
   console.log(h_data);
   console.log(p_data);
+}
+
+function sortPLT(c1, c2, ascending) {
+  return ascending ? sortAscending(c1[ctg.POTENTIALLY_LIFE_THREATENING], c2[ctg.POTENTIALLY_LIFE_THREATENING]) :
+                     sortDescending(c1[ctg.POTENTIALLY_LIFE_THREATENING], c2[ctg.POTENTIALLY_LIFE_THREATENING])
+}
+
+function sortNLT(c1, c2) {
+  return ascending ? sortAscending(c1[ctg.NON_LIFE_THREATENING], c2[ctg.NON_LIFE_THREATENING]) :
+    sortDescending(c1[ctg.NON_LIFE_THREATENING], c2[ctg.NON_LIFE_THREATENING])
+}
+
+function sortAlarm(c1, c2) {
+  return ascending ? sortAscending(c1[ctg.ALARM], c2[ctg.ALARM]) :
+    sortDescending(c1[ctg.ALARM], c2[ctg.ALARM])
+}
+
+function sortFire(c1, c2) {
+  return ascending ? sortAscending(c1[ctg.FIRE], c2[ctg.FIRE]) :
+    sortDescending(c1[ctg.FIRE], c2[ctg.FIRE])
+}
+
+function sortAscending (x1, x2) {
+  return x1 - x2;
+}
+
+function sortDescending (x1, x2) {
+  return x2 - x1;
 }

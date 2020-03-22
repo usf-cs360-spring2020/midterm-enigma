@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- TODO: Change title -->
     <title>CS 560: Midterm - Enigma</title>
 
     <!-- Load Bulma from CDN (consider saving it to repository instead) -->
@@ -136,7 +135,16 @@
             </h1>
 
             <h2>Data Encoding</h2>
-            <p>TODO</p>
+            The x-axis indicates the Call Type Group, while the y-axis indicates the neighborhood names. The valid Call Type Groups are:
+            <ol>
+                <li>Alarm</li>
+                <li>Fire</li>
+                <li>Non Life-Threatening</li>
+                <li>Potentially Life-Threatening</li>
+            </ol>
+            <p>
+                The yearly average number of calls per Call Type Group for each neighborhood is encoded by color in the heatmap. The provided legend shows the full range of total numbers of calls.
+            </p>
 
             <h2>Wrangling</h2>
             <p>
@@ -145,8 +153,8 @@
                 to remove unnecessary columns for faster parsing.
             </p>
 
-            <h2>Instructions</h2>
-            <p>TODO</p>
+            <h2>Interactions</h2>
+            <p>Even though a heatmap is a good way to show the different range of values, it doesnt really show the exact values themselves. To alleviate this issue, a tooltip pops up when you hover over each cell showing you the name of the neighborhood and the exact call count of that call type group.</p>
 
             <svg id="heatmap"></svg>
         </div>
