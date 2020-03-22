@@ -5,7 +5,7 @@ const h_cellWidth = 147;
 const h_cellHeight = 11;
 
 const h_margin = {
-  top: 30,
+  top: 60,
   bottom: 35,
   left: 150,
   right: 15
@@ -120,7 +120,6 @@ function drawAxis() {
                     .attr('id', 'y-axis')
                     .attr('class', 'axis');
 
-
   // create axis generators
   const xAxis = d3.axisTop(scales.x);
   const yAxis = d3.axisLeft(scales.y);
@@ -138,47 +137,57 @@ function drawAxis() {
   xGroup.call(xAxis);
 
   // shift y axis to correct location
-  yGroup.attr('transform', translate(h_margin.left, h_margin.top))
+  yGroup.attr('transform', translate(h_margin.left, h_margin.top));
   yGroup.call(yAxis);
+}
 
-  // const group = plot.append('g')
-  //                   .attr('id', 'heatmap');
-  //
-  // group.selectAll('cell')
-  //      .enter()
-  //
-  //      .append('rect')
-  //      .attr('fill', d => {
-  //        let color = getColor(d[ctg.NON_LIFE_THREATENING]);
-  //        // console.log(color);
-  //        return color;
-  //      })
-  //      .attr('x', d => {
-  //        let x = scales.x(ctg.NON_LIFE_THREATENING);
-  //        // console.log(x);
-  //        return x;
-  //      })
-  //      .attr('y', d => {
-  //        let y = scales.y(d[columns.NEIGHBORHOODS]);
-  //        // console.log(y);
-  //        return y;
-  //      })
-  //      .attr('width', d => {
-  //        let w = h_cellWidth;
-  //        // console.log(w);
-  //        return w;
-  //      })
-  //      .attr('height', d => {
-  //        let h = h_cellHeight;
-  //        // console.log(h);
-  //        return h;
-  //      });
+/*
+ * draw axis titles
+ */
+function drawTitles() {
+  const xMiddle = h_margin.left + midpoint(scales.x.range());
+
+  // test middle calculation
+  // svg.append('circle').attr('cx', xMiddle).attr('cy', yMiddle).attr('r', 5);
+
+  const xTitle = svg.append('text')
+                    .attr('class', 'axis-title')
+                    .text(columns.CTG);
+
+  xTitle.attr('x', xMiddle)
+        .attr('y', h_margin.top/2)
+        .attr('dy', -4)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '14');
+
+  // it is easier to rotate text if you place it in a group first
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotate
+
+  const yGroup = svg.append('g');
+
+  const yTitle = yGroup.append('text')
+                       .attr('class', 'axis-title')
+                       .text("Neighborhoods");
+
+  yTitle.attr('x', 105)
+        .attr('y', h_margin.top - 1)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '14')
+        .attr('text-decoration', 'underline');
+}
+
+/*
+ * calculates the midpoint of a range given as a 2 element array
+ */
+function midpoint(range) {
+  return range[0] + (range[1] - range[0]) / 2.0;
 }
 
 function draw(data) {
   aggregate(data);
 
   drawAxis();
+  drawTitles();
 
   const group = plot.append('g')
                     .attr('id', 'heatmap');
