@@ -1,13 +1,13 @@
 const h_width = 750;
 const h_height = 500;
 
-const h_cellWidth = 200;
+const h_cellWidth = 150;
 const h_cellHeight = 50;
 
 const h_margin = {
   top: 30,
   bottom: 35,
-  left: 100,
+  left: 150,
   right: 15
 };
 
@@ -46,6 +46,21 @@ function priorityString(priority) {
 let myColor = d3.scaleSequential(d3.interpolateYlGnBu)
                 .domain([28, 23695]);
 
+let colorBuckets = [100, 500, 1000, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000];
+let colors = ['#FCFED2', '#E6F5B6', '#D6EFB3', '#C9EAB4',
+              '#BDE5B5', '#A9DDB7', '#8ED3BA','#77CABD',
+              '#4CB7C1', '#228ABB', '#2071B1', '#2355A3',
+              '#1F358B', '#142772', '#0B1F5E'];
+
+let getColor = value => {
+  for(let i = 0; i < colorBuckets.length; i++) {
+    if(value <= colorBuckets[i]) {
+      return colors[i];
+    }
+  }
+  return colors[0];
+};
+
 // select svg
 const svg = d3.select('#heatmap')
               .attr('width', h_width)
@@ -68,17 +83,15 @@ function translate(x, y) {
 
 const scales = {
   x: d3.scaleBand(),
-  y: d3.scaleLinear(),
+  y: d3.scaleBand(),
 };
 
-// we are going to hardcode the domains, so we can setup our scales now
-// that is one benefit of prototyping!
 scales.x.range([0, h_width - h_margin.left - h_margin.right])
         .domain(callTypeGroups)
         .paddingInner(0.05);
 
-scales.y.range([h_height - h_margin.top - h_margin.bottom, 0])
-        .domain(neighborhoods);
+const h_data = [];
+const p_data = [];
 
 // load data and trigger draw
 d3.csv('drew_Fire_Department_Calls_for_Service_reduced.csv', convert)
@@ -100,39 +113,145 @@ function convert(row) {
 }
 
 function draw(data) {
-  console.log(data);
+  // console.log(data);
 
   aggregate(data);
 
   const group = plot.append('g')
                     .attr('id', 'heatmap');
 
+  // fire
   group.selectAll('cell')
        .data(h_data)
        .enter()
        .append('rect')
        .attr('fill', d => {
-         let color = myColor(d[ctg.FIRE]);
-         console.log(color);
+         let color = getColor(d[ctg.FIRE]);
+         // console.log(color);
          return color;
        })
-       // .attr('x', d => scales.x(d[columns.ACTIVITY_PERIOD].str))
-       // .attr('y', d => {
-       //   let point = scales.y(d[columns.PASSENGER_COUNT]);
-       //   domesticStartPoints[d[columns.ACTIVITY_PERIOD].str] = point;
-       //   return point;
-       // })
-       // .attr('width', scales.x.bandwidth())
-       // .attr('height', d => height - scales.y(d[columns.PASSENGER_COUNT]) - margin.bottom - margin.top);
+       .attr('x', d => {
+         let x = scales.x(ctg.FIRE);
+         // console.log(x);
+         return x;
+       })
+       .attr('y', d => {
+         let y = scales.y(d[columns.NEIGHBORHOODS]);
+         // console.log(y);
+         return y;
+       })
+       .attr('width', d => {
+         let w = h_cellWidth;
+         console.log(w);
+         return w;
+       })
+       .attr('height', d => {
+         let h = h_cellHeight;
+         console.log(h);
+         return h;
+       });
+
+  // Alarm
+  group.selectAll('cell')
+       .data(h_data)
+       .enter()
+
+       .append('rect')
+       .attr('fill', d => {
+         let color = getColor(d[ctg.ALARM]);
+         // console.log(color);
+         return color;
+       })
+       .attr('x', d => {
+         let x = scales.x(ctg.ALARM);
+         // console.log(x);
+         return x;
+       })
+       .attr('y', d => {
+         let y = scales.y(d[columns.NEIGHBORHOODS]);
+         // console.log(y);
+         return y;
+       })
+       .attr('width', d => {
+         let w = h_cellWidth;
+         // console.log(w);
+         return w;
+       })
+       .attr('height', d => {
+         let h = h_cellHeight;
+         // console.log(h);
+         return h;
+       });
+
+  // NON_LIFE_THREATENING
+  group.selectAll('cell')
+       .data(h_data)
+       .enter()
+
+       .append('rect')
+       .attr('fill', d => {
+         let color = getColor(d[ctg.NON_LIFE_THREATENING]);
+         // console.log(color);
+         return color;
+       })
+       .attr('x', d => {
+         let x = scales.x(ctg.NON_LIFE_THREATENING);
+         // console.log(x);
+         return x;
+       })
+       .attr('y', d => {
+         let y = scales.y(d[columns.NEIGHBORHOODS]);
+         // console.log(y);
+         return y;
+       })
+       .attr('width', d => {
+         let w = h_cellWidth;
+         // console.log(w);
+         return w;
+       })
+       .attr('height', d => {
+         let h = h_cellHeight;
+         // console.log(h);
+         return h;
+       });
+
+  // NON_LIFE_THREATENING
+  group.selectAll('cell')
+       .data(h_data)
+       .enter()
+
+       .append('rect')
+       .attr('fill', d => {
+         let color = getColor(d[ctg.POTENTIALLY_LIFE_THREATENING]);
+         // console.log(color);
+         return color;
+       })
+       .attr('x', d => {
+         let x = scales.x(ctg.POTENTIALLY_LIFE_THREATENING);
+         // console.log(x);
+         return x;
+       })
+       .attr('y', d => {
+         let y = scales.y(d[columns.NEIGHBORHOODS]);
+         // console.log(y);
+         return y;
+       })
+       .attr('width', d => {
+         let w = h_cellWidth;
+         // console.log(w);
+         return w;
+       })
+       .attr('height', d => {
+         let h = h_cellHeight;
+         // console.log(h);
+         return h;
+       });
 }
 
-const h_map = d3.map();
-const p_map = d3.map();
-
-const h_data = [];
-const p_data = [];
-
 function aggregate(data) {
+  const h_map = d3.map();
+  const p_map = d3.map();
+
   // Sum up all calls for each neighborhood
   data.forEach(d => {
     let neighborhood = d[columns.NEIGHBORHOODS];
@@ -202,9 +321,13 @@ function aggregate(data) {
     p_data.push(newEntry);
   });
 
-  console.log(h_map);
-  console.log(p_map);
-  console.log(neighborhoods);
+  scales.y.range([h_height - h_margin.top - h_margin.bottom, 0])
+        .domain(neighborhoods)
+        .paddingInner(0.05);
+
+  // console.log(h_map);
+  // console.log(p_map);
+  // console.log(neighborhoods);
   console.log(h_data);
   console.log(p_data);
 }
