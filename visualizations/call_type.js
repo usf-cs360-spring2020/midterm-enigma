@@ -1,13 +1,13 @@
-const h_width = 750;
+const h_width = 800;
 const h_height = 500;
 
-const h_cellWidth = 147;
+const h_cellWidth = 149;
 const h_cellHeight = 11;
 
 const h_margin = {
   top: 60,
   bottom: 35,
-  left: 150,
+  left: 190,
   right: 15
 };
 
@@ -69,11 +69,14 @@ console.assert(svg.size() === 1);
 
 // add plot region
 const plot = svg.append('g')
-                .attr('id', 'heatmap');
+                .attr('id', 'heatmap')
+                .attr('transform', translate(h_margin.left, h_margin.top));
 
-// transform region by margin
-plot.attr('transform', translate(h_margin.left, h_margin.top));
-
+// const annotations = svg.append("g")
+//                        .attr("id", "annotation");
+//
+// const tooltip = svg.append("g")
+//                        .attr("id", "tooltip");
 /*
  * returns a translate string for the transform attribute
  */
@@ -147,9 +150,6 @@ function drawAxis() {
 function drawTitles() {
   const xMiddle = h_margin.left + midpoint(scales.x.range());
 
-  // test middle calculation
-  // svg.append('circle').attr('cx', xMiddle).attr('cy', yMiddle).attr('r', 5);
-
   const xTitle = svg.append('text')
                     .attr('class', 'axis-title')
                     .text(columns.CTG);
@@ -160,16 +160,13 @@ function drawTitles() {
         .attr('text-anchor', 'middle')
         .attr('font-size', '14');
 
-  // it is easier to rotate text if you place it in a group first
-  // https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotate
-
   const yGroup = svg.append('g');
 
   const yTitle = yGroup.append('text')
                        .attr('class', 'axis-title')
                        .text("Neighborhoods");
 
-  yTitle.attr('x', 105)
+  yTitle.attr('x', 145)
         .attr('y', h_margin.top - 1)
         .attr('text-anchor', 'middle')
         .attr('font-size', '14')
@@ -287,11 +284,10 @@ function draw(data) {
          return h;
        });
 
-  // NON_LIFE_THREATENING
+  // POTENTIALLY_LIFE_THREATENING
   group.selectAll('cell')
        .data(h_data)
        .enter()
-
        .append('rect')
        .attr('fill', d => {
          let color = getColor(d[ctg.POTENTIALLY_LIFE_THREATENING]);
@@ -317,7 +313,44 @@ function draw(data) {
          let h = h_cellHeight;
          // console.log(h);
          return h;
+       })
+       .on("mouseover.tooltip", d => {
+         let me = d3.select(this);
+         let div = d3.select("body")
+                     .append("div");
+
+         div.attr("id", "details")
+            .attr("class", "tooltip")
+            .transition();
+
+         let rows = div.append("table")
+                       .selectAll("tr")
+                       .data(Object.keys(d))
+                       .enter()
+                       .append("tr");
+
+         rows.append("th").text(key => key);
+         rows.append("td").text(key => d[key]);
+       })
+       .on("mousemove.tooltip", d => {
+         let div = d3.select("div#details");
+
+         // get height of tooltip
+         let bbox = div.node().getBoundingClientRect();
+
+         // Get mouse position relative to the page
+         div.style("left", d3.event.pageX + "px");
+         div.style("top",  (d3.event.pageY - bbox.height) + "px");
+       })
+       .on("mouseout.tooltip", d => {
+         d3.selectAll("div")
+           .transition();
+
+         d3.selectAll("div#details")
+           .remove();
        });
+
+  // drawHover();
 }
 
 function aggregate(data) {
@@ -402,4 +435,36 @@ function aggregate(data) {
   // console.log(neighborhoods);
   console.log(h_data);
   console.log(p_data);
+}
+
+function drawHover() {
+  // let vis = svg.node();
+  // let annotations = svg.append("g")
+  //                      .attr("id", "annotation");
+  //
+  // let cells = d3.select(vis)
+  //               .select("#heatmap")
+  //               .selectAll("cell");
+  //
+  // cells.on("mouseover.hover1", function(d) {
+  //   let me = d3.select(this);
+  //
+  //   annotations.insert("text")
+  //              .attr("id", "label")
+  //              .attr("x", me.attr("cx"))
+  //              .attr("y", me.attr("cy"))
+  //              // .attr("dy", h_cellWidth/2)
+  //              .attr("text-anchor", "middle")
+  //              .text(d[columns.NEIGHBORHOODS]);
+  //
+  //   // show what we interacted with
+  //   // d3.select(status).text("hover: " + d[ctg.FIRE]);
+  //   console.log("hover: " + d[ctg.FIRE]);
+  // });
+  //
+  // cells.on("mouseout.hover1", function(d) {
+  //   annotations.select("text#label").remove();
+  //   // d3.select(status).text("hover: none");
+  //   console.log("hover: none");
+  // });
 }
