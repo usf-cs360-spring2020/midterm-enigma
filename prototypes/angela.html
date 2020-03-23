@@ -67,7 +67,7 @@
                       </a>
                       <a class="navbar-item" href="drew.html" title="Drew">
                         <span class="icon"><i class="far fa-caret-square-down"></i></span>
-                        <span>Call Type Group Trends for Each Neighborhood</span>
+                        <span>Yearly Average Calls Per Neighborhood (2013-2019)</span>
                       </a>
                       <a class="navbar-item" href="angela.html" title="Angela">
                         <span class="icon"><i class="fas fa-chart-area"></i></span>
@@ -88,7 +88,7 @@
                         </a>
                         <a class="navbar-item" href="../visualizations/call_type_trends_visualization.html" title="Drew">
                             <span class="icon"><i class="far fa-caret-square-down"></i></span>
-                            <span>Call Type Group Trends for Each Neighborhood</span>
+                            <span>Yearly Average Calls Per Neighborhood (2013-2019)</span>
                         </a>
                         <a class="navbar-item" href="angela.html" title="Angela">
                             <span class="icon"><i class="fas fa-chart-area"></i></span>
@@ -111,7 +111,7 @@
     <div class="container">
         <!-- Begin page content -->
         <div class="content">
-          <h1 class="title"> Call Type Group Trends for Each Neighborhood </h1>
+          <h1 class="title"> Yearly Average Calls Per Neighborhood (2013-2019) </h1>
          <h2>Data Wrangling</h2>
          <p>I used the filter function on the SF Data website to filter on calls from received during 2019 (received after 1/1/2019 12 AM, received before 1/1/2020 12 AM) where the call group type was FIRE, and the final priority was 3 (emergency). I used Tableau to extract the call date (MM/DD) from the Received Date column and used the DATEDIFF function to calculate the length (subtracting the call received time from the time the unit was available again). I created the separate neighborhood bubble charts using the Tableau filter function to ensure the same color scheme across all subgraphs.</p>
          <h2>Motivation</h2>

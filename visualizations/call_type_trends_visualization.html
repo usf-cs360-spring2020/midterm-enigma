@@ -86,7 +86,7 @@
                       </a>
                       <a class="navbar-item" href="../prototypes/drew.html" title="Drew">
                         <span class="icon"><i class="far fa-caret-square-down"></i></span>
-                        <span>Call Type Group Trends for Each Neighborhood</span>
+                        <span>Yearly Average Calls Per Neighborhood (2013-2019)</span>
                       </a>
                       <a class="navbar-item" href="../prototypes/angela.html" title="Angela">
                         <span class="icon"><i class="fas fa-chart-area"></i></span>
@@ -107,7 +107,7 @@
                         </a>
                         <a class="navbar-item" href="call_type_trends_visualization.html" title="Drew">
                             <span class="icon"><i class="far fa-caret-square-down"></i></span>
-                            <span>Call Type Group Trends for Each Neighborhood</span>
+                            <span>Yearly Average Calls Per Neighborhood (2013-2019)</span>
                         </a>
                         <a class="navbar-item" href="../prototypes/angela.html" title="Angela">
                             <span class="icon"><i class="fas fa-chart-area"></i></span>
@@ -131,7 +131,7 @@
         <!-- Begin page content -->
         <div class="content">
             <h1 class="title">
-                Call Type Group Trends for Each Neighborhood
+                Yearly Average Calls Per Neighborhood (2013-2019)
             </h1>
 
             <h2>Data Encoding</h2>
@@ -155,7 +155,10 @@
 
             <h2>Interactions</h2>
             <p>Even though a heatmap is a good way to show the different range of values, it doesnt really show the exact values themselves. To alleviate this issue, a tooltip pops up when you hover over each cell showing you the name of the neighborhood and the exact call count of that call type group.</p>
+            <p>In addition to viewing tooltips, users can also choose to view a sorted view of the heatmap by Call Type Group (in descending order) via a dropdown menu at the top of the heatmap.</p>
 
+            <br/>
+            Sorting order:
             <select id = "options">
                 <option value="N/A" selected="selected">N/A</option>
                 <option value="Fire">Fire</option>
@@ -163,7 +166,15 @@
                 <option value="Non Life-threatening">Non Life-Threatening</option>
                 <option value="Potentially Life-Threatening">Potentially Life-Threatening</option>
             </select>
+            <br/>
             <svg id="heatmap"></svg>
+
+            <h2>Conclusion</h2>
+            <p>From viewing the average calls for each call type group, it's almost unanimous that the top 5 most active neighborhoods are Tenderloin, Mission, Financial Distric/South Beach, South of Market, and Bayview Hunters Point. Over the 7 year period from 2013 to 2019 these 5 neighborhoods were consistently at the top in terms of call activity. And while this is not an indication of how dangerous area can be (as it would hard to say without population data to back up that hypothesis), this visualization does go to show that some neighborhoods do have higher call activity than most of the other neighborhoods in San Francisco.</p>
+
+            <h2>Inspirations</h2>
+            <p><a href="http://bl.ocks.org/williaster/10ef968ccfdc71c30ef8">Inspiration for modifying charts via dropdown menu.</a></p>
+            <p><a href="https://observablehq.com/@sjengle/interactivity?collection=@sjengle/interactive-scatterplot">Tooltip css.</a></p>
         </div>
         <!-- End page content -->
     </div>

@@ -170,14 +170,21 @@ function drawTitles() {
      .attr('class', 'main-title')
      .text('Yearly Average Calls')
      .attr('y', 20)
-     .style('font-size', '24px');
+     .style('font-size', '23px');
 
   svg.append('text')
      .attr('class', 'main-title')
      .text('Per Neighborhood')
      .attr('dx', 10)
-     .attr('y', 44)
-     .style('font-size', '24px');
+     .attr('y', 42)
+     .style('font-size', '23px');
+
+  svg.append('text')
+     .attr('class', 'main-title')
+     .text('(2013-2019)')
+     .attr('dx', 42)
+     .attr('y', 65)
+     .style('font-size', '23px');
 
   const xMiddle = h_margin.left + midpoint(scales.x.range());
 
@@ -219,7 +226,7 @@ function drawLegend() {
 
   group.append('text')
        .attr('class', 'axis-title')
-       .text('Average Calls Per Year')
+       .text('Average Call Count')
        .attr('dx', -75);
 
   for(let i = 0; i < colorBuckets.length; i++) {
