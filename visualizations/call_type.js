@@ -24,6 +24,7 @@ const ctg = {
   POTENTIALLY_LIFE_THREATENING: 'Potentially Life-Threatening',
 };
 
+const sortingGroups = ['N/A', 'Fire', 'Alarm', 'Non Life-threatening', 'Potentially Life-Threatening'];
 const callTypeGroups = ['Fire', 'Alarm', 'Non Life-threatening', 'Potentially Life-Threatening'];
 const neighborhoods = [];
 
@@ -68,6 +69,32 @@ const plot = svg.append('g')
                 .attr('id', 'heatmap')
                 .attr('transform', translate(h_margin.left, h_margin.top));
 
+const h_data_map = d3.map();
+const neighborhoods_map = d3.map();
+const h_data = [];
+const p_data = [];
+
+function updateHeatmap(group) {
+  let sortedNeighborhoods = neighborhoods_map.get(group);
+  scales.y.domain(sortedNeighborhoods);
+
+  let sortedData = h_data_map.get(group);
+
+  drawHeatmap(sortedData);
+  drawAxis();
+}
+
+// Handler for dropdown value change
+let dropdownChange = function() {
+  let sortGroup = d3.select(this)
+                    .property('value');
+
+  updateHeatmap(sortGroup);
+};
+
+let dropdown = d3.select('#options')
+                 .on('change', dropdownChange);
+
 /*
  * returns a translate string for the transform attribute
  */
@@ -83,9 +110,6 @@ const scales = {
 scales.x.range([0, h_width - h_margin.left - h_margin.right])
         .domain(callTypeGroups)
         .paddingInner(0);
-
-const h_data = [];
-const p_data = [];
 
 // load data and trigger draw
 d3.csv('drew_Fire_Department_Calls_for_Service_reduced.csv', convert)
@@ -106,14 +130,14 @@ function convert(row) {
   return convert;
 }
 
-function drawAxis() {
-  const xGroup = svg.append('g')
-                    .attr('id', 'x-axis')
-                    .attr('class', 'axis');
-  const yGroup = svg.append('g')
-                    .attr('id', 'y-axis')
-                    .attr('class', 'axis');
+const xGroup = svg.append('g')
+                  .attr('id', 'x-axis')
+                  .attr('class', 'axis');
+const yGroup = svg.append('g')
+                  .attr('id', 'y-axis')
+                  .attr('class', 'axis');
 
+function drawAxis() {
   // create axis generators
   const xAxis = d3.axisTop(scales.x);
   const yAxis = d3.axisLeft(scales.y);
@@ -133,6 +157,9 @@ function drawAxis() {
   // shift y axis to correct location
   yGroup.attr('transform', translate(h_margin.left, h_margin.top));
   yGroup.call(yAxis);
+
+  xGroup.exit().remove();
+  yGroup.exit().remove();
 }
 
 /*
@@ -225,39 +252,23 @@ function draw(data) {
   drawTitles();
   drawLegend();
 
-  const group = plot.append('g')
-                    .attr('id', 'heatmap');
+  drawHeatmap(h_data);
+}
 
+const group = plot.append('g')
+                  .attr('id', 'heatmap');
+
+function drawHeatmap(data) {
   // fire
-  group.selectAll('cell')
-       .data(h_data)
+  let f_cells = group.selectAll('cell')
+       .data(data)
        .enter()
        .append('rect')
-       .attr('fill', d => {
-         let color = getColor(d[ctg.FIRE]);
-         // console.log(color);
-         return color;
-       })
-       .attr('x', d => {
-         let x = scales.x(ctg.FIRE);
-         // console.log(x);
-         return x;
-       })
-       .attr('y', d => {
-         let y = scales.y(d[columns.NEIGHBORHOODS]);
-         // console.log(y);
-         return y;
-       })
-       .attr('width', d => {
-         let w = h_cellWidth;
-         console.log(w);
-         return w;
-       })
-       .attr('height', d => {
-         let h = h_cellHeight;
-         console.log(h);
-         return h;
-       })
+       .attr('fill', d => getColor( d[ctg.FIRE]))
+       .attr('x', scales.x(ctg.FIRE))
+       .attr('y', d => scales.y(d[columns.NEIGHBORHOODS]))
+       .attr('width', h_cellWidth)
+       .attr('height', h_cellHeight)
        .on('mouseover.tooltip', d => {
          let div = d3.select('body')
                      .append('div');
@@ -270,7 +281,6 @@ function draw(data) {
          let rows = div.append('table')
                        .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.FIRE])
-                       // .data(Object.keys(d))
                        .enter()
                        .append('tr');
 
@@ -296,36 +306,16 @@ function draw(data) {
        });
 
   // Alarm
-  group.selectAll('cell')
-       .data(h_data)
+  let a_cells = group.selectAll('cell')
+       .data(data)
        .enter()
 
        .append('rect')
-       .attr('fill', d => {
-         let color = getColor(d[ctg.ALARM]);
-         // console.log(color);
-         return color;
-       })
-       .attr('x', d => {
-         let x = scales.x(ctg.ALARM);
-         // console.log(x);
-         return x;
-       })
-       .attr('y', d => {
-         let y = scales.y(d[columns.NEIGHBORHOODS]);
-         // console.log(y);
-         return y;
-       })
-       .attr('width', d => {
-         let w = h_cellWidth;
-         // console.log(w);
-         return w;
-       })
-       .attr('height', d => {
-         let h = h_cellHeight;
-         // console.log(h);
-         return h;
-       })
+       .attr('fill', d => getColor(d[ctg.ALARM]))
+       .attr('x', scales.x(ctg.ALARM))
+       .attr('y', d => scales.y(d[columns.NEIGHBORHOODS]))
+       .attr('width',h_cellWidth)
+       .attr('height', h_cellHeight)
        .on('mouseover.tooltip', d => {
          let div = d3.select('body')
                      .append('div');
@@ -338,7 +328,6 @@ function draw(data) {
          let rows = div.append('table')
                        .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.ALARM])
-                       // .data(Object.keys(d))
                        .enter()
                        .append('tr');
 
@@ -364,36 +353,15 @@ function draw(data) {
        });
 
   // NON_LIFE_THREATENING
-  group.selectAll('cell')
-       .data(h_data)
+  let n_cells = group.selectAll('cell')
+       .data(data)
        .enter()
-
        .append('rect')
-       .attr('fill', d => {
-         let color = getColor(d[ctg.NON_LIFE_THREATENING]);
-         // console.log(color);
-         return color;
-       })
-       .attr('x', d => {
-         let x = scales.x(ctg.NON_LIFE_THREATENING);
-         // console.log(x);
-         return x;
-       })
-       .attr('y', d => {
-         let y = scales.y(d[columns.NEIGHBORHOODS]);
-         // console.log(y);
-         return y;
-       })
-       .attr('width', d => {
-         let w = h_cellWidth;
-         // console.log(w);
-         return w;
-       })
-       .attr('height', d => {
-         let h = h_cellHeight;
-         // console.log(h);
-         return h;
-       })
+       .attr('fill', d => getColor(d[ctg.NON_LIFE_THREATENING]))
+       .attr('x', scales.x(ctg.NON_LIFE_THREATENING))
+       .attr('y', d => scales.y(d[columns.NEIGHBORHOODS]))
+       .attr('width', h_cellWidth)
+       .attr('height', h_cellHeight)
        .on('mouseover.tooltip', d => {
          let div = d3.select('body')
                      .append('div');
@@ -402,11 +370,9 @@ function draw(data) {
             .attr('class', 'tooltip')
             .transition();
 
-
          let rows = div.append('table')
                        .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.NON_LIFE_THREATENING])
-                       // .data(Object.keys(d))
                        .enter()
                        .append('tr');
 
@@ -432,35 +398,15 @@ function draw(data) {
        });
 
   // POTENTIALLY_LIFE_THREATENING
-  group.selectAll('cell')
-       .data(h_data)
+  let p_cells = group.selectAll('cell')
+       .data(data)
        .enter()
        .append('rect')
-       .attr('fill', d => {
-         let color = getColor(d[ctg.POTENTIALLY_LIFE_THREATENING]);
-         // console.log(color);
-         return color;
-       })
-       .attr('x', d => {
-         let x = scales.x(ctg.POTENTIALLY_LIFE_THREATENING);
-         // console.log(x);
-         return x;
-       })
-       .attr('y', d => {
-         let y = scales.y(d[columns.NEIGHBORHOODS]);
-         // console.log(y);
-         return y;
-       })
-       .attr('width', d => {
-         let w = h_cellWidth;
-         // console.log(w);
-         return w;
-       })
-       .attr('height', d => {
-         let h = h_cellHeight;
-         // console.log(h);
-         return h;
-       })
+       .attr('fill', d => getColor(d[ctg.POTENTIALLY_LIFE_THREATENING]))
+       .attr('x', scales.x(ctg.POTENTIALLY_LIFE_THREATENING))
+       .attr('y', d => scales.y(d[columns.NEIGHBORHOODS]))
+       .attr('width', h_cellWidth)
+       .attr('height', h_cellHeight)
        .on('mouseover.tooltip', d => {
          let div = d3.select('body')
                      .append('div');
@@ -469,11 +415,9 @@ function draw(data) {
             .attr('class', 'tooltip')
             .transition();
 
-
          let rows = div.append('table')
                        .selectAll('tr')
                        .data([columns.NEIGHBORHOODS, ctg.POTENTIALLY_LIFE_THREATENING])
-                       // .data(Object.keys(d))
                        .enter()
                        .append('tr');
 
@@ -498,7 +442,10 @@ function draw(data) {
            .remove();
        });
 
-  // drawHover();
+  f_cells.exit().remove();
+  a_cells.exit().remove();
+  n_cells.exit().remove();
+  p_cells.exit().remove();
 }
 
 function aggregate(data) {
@@ -524,7 +471,6 @@ function aggregate(data) {
 
           finalPriorities[priority] = pCount + 1;
         } else {
-          neighborhoods.push(neighborhood);
           let groups = {
             [ctg.FIRE]: 0,
             [ctg.ALARM]: 0,
@@ -551,6 +497,7 @@ function aggregate(data) {
   h_map.each((ctg, n) => {
     let newEntry = {};
     newEntry[columns.NEIGHBORHOODS] = n;
+    neighborhoods.push(n);
 
     Object.entries(ctg).forEach(entry => {
       let type = entry[0];
@@ -574,38 +521,58 @@ function aggregate(data) {
     p_data.push(newEntry);
   });
 
+  // Create sorted lists
+  for(let i = 0; i < sortingGroups.length; i++) {
+    let group = sortingGroups[i];
+    let dat = [...h_data];
+
+    h_data_map.set(group, dat);
+    let list = h_data_map.get(group);
+
+    sortList(group, list);
+
+    let n = [];
+    for(let j = 0; j < list.length; j++) {
+      let v = list[j][columns.NEIGHBORHOODS];
+      n.push(v);
+    }
+    neighborhoods_map.set(group, n);
+  }
+
   scales.y.range([h_height - h_margin.top, 0])
         .domain(neighborhoods)
         .paddingOuter(0.1);
-
-  console.log(h_data);
-  console.log(p_data);
 }
 
-function sortPLT(c1, c2, ascending) {
-  return ascending ? sortAscending(c1[ctg.POTENTIALLY_LIFE_THREATENING], c2[ctg.POTENTIALLY_LIFE_THREATENING]) :
-                     sortDescending(c1[ctg.POTENTIALLY_LIFE_THREATENING], c2[ctg.POTENTIALLY_LIFE_THREATENING])
+function sortList(group, data) {
+  switch(group) {
+    case sortingGroups[1]:
+      data.sort(sortFire);
+      break;
+    case sortingGroups[2]:
+      data.sort(sortAlarm);
+      break;
+    case sortingGroups[3]:
+      data.sort(sortNLT);
+      break;
+    case sortingGroups[4]:
+      data.sort(sortPLT);
+      break;
+  }
 }
 
-function sortNLT(c1, c2) {
-  return ascending ? sortAscending(c1[ctg.NON_LIFE_THREATENING], c2[ctg.NON_LIFE_THREATENING]) :
-    sortDescending(c1[ctg.NON_LIFE_THREATENING], c2[ctg.NON_LIFE_THREATENING])
+function sortFire(row1, row2) {
+  return d3.descending(row2[ctg.FIRE], row1[ctg.FIRE])
 }
 
-function sortAlarm(c1, c2) {
-  return ascending ? sortAscending(c1[ctg.ALARM], c2[ctg.ALARM]) :
-    sortDescending(c1[ctg.ALARM], c2[ctg.ALARM])
+function sortAlarm(row1, row2) {
+  return d3.descending(row2[ctg.ALARM], row1[ctg.ALARM]);
 }
 
-function sortFire(c1, c2) {
-  return ascending ? sortAscending(c1[ctg.FIRE], c2[ctg.FIRE]) :
-    sortDescending(c1[ctg.FIRE], c2[ctg.FIRE])
+function sortNLT(row1, row2) {
+  return d3.descending(row2[ctg.NON_LIFE_THREATENING], row1[ctg.NON_LIFE_THREATENING]);
 }
 
-function sortAscending (x1, x2) {
-  return x1 - x2;
-}
-
-function sortDescending (x1, x2) {
-  return x2 - x1;
+function sortPLT(row1, row2) {
+  return d3.descending(row2[ctg.POTENTIALLY_LIFE_THREATENING], row1[ctg.POTENTIALLY_LIFE_THREATENING]);
 }
