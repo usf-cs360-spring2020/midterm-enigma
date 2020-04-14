@@ -9,6 +9,7 @@
 
     <!-- Load Bulma from CDN (consider saving it to repository instead) -->
     <!-- https://bulma.io/ -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" href="../styles.css">
 
@@ -82,7 +83,7 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a class="navbar-item" href="nick.html">
+                        <a class="navbar-item" href="../visualizations/nick-life-threatening-calls.html">
                             <span class="icon"><i class="fas fa-chart-line"></i></span>
                             <span>Trends of Number of Calls Deemed "Life Threatening"</span>
                         </a>
@@ -90,7 +91,7 @@
                             <span class="icon"><i class="far fa-caret-square-down"></i></span>
                             <span>Yearly Average Calls Per Neighborhood (2013-2019)</span>
                         </a>
-                        <a class="navbar-item" href="angela.html" title="Angela">
+                        <a class="navbar-item" href="../visualizations/angela-neighborhood-emergencies.html" title="Angela">
                             <span class="icon"><i class="fas fa-chart-area"></i></span>
                             <span>Emergency Fire Response Across Neighborhoods</span>
                         </a>
@@ -130,6 +131,9 @@
         so that when you mouse over a bubble, a tooltip comes up with
         more information about that particular call. I think this will be a fitting complement to the way I showed calls happening both by time of day and time of year. If I had aggregated calls, then that tooltip functionality would no longer make sense.</p>
       <p>It would also be cool if I could have a timeline slider to show more years' data, or an option to select neighborhood on one graph. I've shown multiple neighborhoods on multiple individual charts, but there are too many neighborhoods to feasibly show this way. A small multiples of bubblecharts for each neighborhood is also an option, but then the hover/tooltip functionality becomes more difficult to use, since each individual call is so small. </p> </div>
+      <h2>Feedback</h2>
+      <p>I received multiple people's feedback indicating that I should reduce the number of colors on my charts. This is partially dependent on the neighborhood, since different neighborhoods have different call incidents. Therefore, when creating my final visualization, I hardcoded colors to specific categories to ensure that the color pairings would make sense (ie, "Water Rescue" should be blue, unlike the various fire categories.)</p>
+      <p>I was also advised to account for multiple units responding to the same call. I didn't consider this on my prototype, so such situations were incorrectly treated as separate incidents. I have accounted for this on my final version.</p>
         <!-- End page content -->
     </div>
 </section>

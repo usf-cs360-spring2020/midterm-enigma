@@ -40,7 +40,7 @@
         <div class="navbar-brand">
             <!-- TODO: Change link to repository homepage if needed -->
             <!-- TODO: Change which navbar-item is-active if needed -->
-            <a class="navbar-item is-active" href="index.html">
+            <a class="navbar-item is-active" href="../index.html">
                 <span class="icon"><i class="fas fa-home"></i></span>
                 <span>Home</span>
             </a>
@@ -56,7 +56,7 @@
         <div id="main-menu" class="navbar-menu has-text-weight-medium">
             <!-- Left navbar items -->
             <div class="navbar-start">
-                <a class="navbar-item" href="dataset.html" title="Data">
+                <a class="navbar-item" href="../dataset.html" title="Data">
                     <span class="icon"><i class="fas fa-table"></i></span>
                     <span>Data</span>
                 </a>
@@ -67,15 +67,15 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a class="navbar-item" href="./prototypes/nick.html">
+                        <a class="navbar-item" href="../prototypes/nick.html" title="Nick">
                             <span class="icon"><i class="fas fa-chart-line"></i></span>
                             <span>Trends of Number of Calls Deemed "Life Threatening"</span>
                         </a>
-                        <a class="navbar-item" href="./prototypes/drew.html" title="Drew">
+                        <a class="navbar-item" href="../prototypes/drew.html" title="Drew">
                             <span class="icon"><i class="far fa-caret-square-down"></i></span>
                             <span>Call Type Group Trends for Each Neighborhood</span>
                         </a>
-                        <a class="navbar-item" href="./prototypes/angela.html" title="Angela">
+                        <a class="navbar-item" href="../prototypes/angela.html" title="Angela">
                             <span class="icon"><i class="fas fa-chart-area"></i></span>
                             <span>Emergency Fire Response Across Neighborhoods</span>
                         </a>
@@ -88,11 +88,11 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a class="navbar-item" href="./prototypes/nick.html">
+                        <a class="navbar-item" href="nick-life-threatening-calls.html">
                             <span class="icon"><i class="fas fa-chart-line"></i></span>
                             <span>Trends of Number of Calls Deemed "Life Threatening"</span>
                         </a>
-                        <a class="navbar-item" href="./visualizations/call_type_trends_visualization.html" title="Drew">
+                        <a class="navbar-item" href="../visualizations/call_type_trends_visualization.html" title="Drew">
                             <span class="icon"><i class="far fa-caret-square-down"></i></span>
                             <span>Call Type Group Trends for Each Neighborhood</span>
                         </a>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
 
-                <a class="navbar-item" href="about.html" title="About">
+                <a class="navbar-item" href="../about.html" title="About">
                     <span class="icon"><i class="fas fa-info-circle"></i></span>
                     <span>About</span>
                 </a>
@@ -127,8 +127,10 @@
       The number of neighborhoods is reduced from 15 to 8, compared to our prototype, because the 7 removed neighborhoods showed similar trends and only made the visualization more crowded.
       The x-axis indicates the time period by year, while the y-axis indicates the number of calls for each year. Since this is broken down by neighborhood, each neighborhood is colored, and the color is indicated in the legend that accompanies the chart.
       There is clearly an upward trend in terms of calles deemed life-threatening in most of the neighborhoods indicated in the chart.
-      This may in part be because of an increase in population year over year, so we can not necessarily conclude that there's an increase in calls per person. However, considering some of the neighborhoods included in this visualization have increases of 50% (Tenderloin, Bayview/Hunter's Point) to 75% (South of Market), it's likely these increases in life-threatening calls are not only because of an increase in population.
+      This may in part be because of an increase in population year over year, so we can not necessarily conclude that there's an increase in calls per person. However, considering some of the neighborhoods included in this visualization have increases of 50% (Tenderloin, Bayview) to 75% (South of Market), it's likely these increases in life-threatening calls are not only because of an increase in population.
     </p>
+    <h2>Interactions</h2>
+    <p> I added tooltips upon hover to make it easier to tell which line applies to which neighborhood, and I only added the ability for the user to filter which lines they'd like to see by clicking on each line, so that the graph is easier to intepret, since the bottom section still looks a bit crowded.</p>
   </div>
 <div id="container" class="svg-container"></div>
 </div>
