@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- TODO: Change title -->
+    <title>CS 560: Midterm - Enigma</title>
+
+    <!-- Load Bulma from CDN (consider saving it to repository instead) -->
+    <!-- https://bulma.io/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="../styles.css">
+
+    <!-- Load Font Awesome 5 (free) icons -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+
+<!-- Page header -->
+<!-- https://bulma.io/documentation/layout/hero/ -->
+<section class="hero is-primary is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">CS 560: Midterm Team Enigma</h1>
+        </div>
+    </div>
+</section>
+<!-- End page header -->
+
+<!-- Page navigation -->
+<!-- https://bulma.io/documentation/components/navbar/ -->
+<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <!-- TODO: Change link to repository homepage if needed -->
+            <!-- TODO: Change which navbar-item is-active if needed -->
+            <a class="navbar-item is-active" href="../index.html">
+                <span class="icon"><i class="fas fa-home"></i></span>
+                <span>Home</span>
+            </a>
+
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="main-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="main-menu" class="navbar-menu has-text-weight-medium">
+            <!-- Left navbar items -->
+            <div class="navbar-start">
+                <a class="navbar-item" href="../dataset.html" title="Data">
+                    <span class="icon"><i class="fas fa-table"></i></span>
+                    <span>Data</span>
+                </a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        Prototypes
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="../prototypes/nick.html" title="Nick">
+                            <span class="icon"><i class="fas fa-chart-line"></i></span>
+                            <span>Trends of Number of Calls Deemed "Life Threatening"</span>
+                        </a>
+                        <a class="navbar-item" href="../prototypes/drew.html" title="Drew">
+                            <span class="icon"><i class="far fa-caret-square-down"></i></span>
+                            <span>Call Type Group Trends for Each Neighborhood</span>
+                        </a>
+                        <a class="navbar-item" href="../prototypes/angela.html" title="Angela">
+                            <span class="icon"><i class="fas fa-chart-area"></i></span>
+                            <span>Emergency Fire Response Across Neighborhoods</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        Visualizations
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="../visualizations/nick-life-threatening-calls.html" title-"Nick">
+                            <span class="icon"><i class="fas fa-chart-line"></i></span>
+                            <span>Trends of Number of Calls Deemed "Life Threatening"</span>
+                        </a>
+                        <a class="navbar-item" href="../visualizations/call_type_trends_visualization.html" title="Drew">
+                            <span class="icon"><i class="far fa-caret-square-down"></i></span>
+                            <span>Yearly Average Calls Per Neighborhood (2013-2019)</span>
+                        </a>
+                        <a class="navbar-item" href="../visualizations/angela-neighborhood-emergencies.html" title="Angela">
+                            <span class="icon"><i class="fas fa-chart-area"></i></span>
+                            <span>Emergency Fire Response Across Neighborhoods</span>
+                        </a>
+                    </div>
+                </div>
+
+                <a class="navbar-item" href="../about.html" title="About">
+                    <span class="icon"><i class="fas fa-info-circle"></i></span>
+                    <span>About</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- End page navigation -->
+
+<section class="section">
+    <div class="container">
+        <!-- Begin page content -->
+        <div class="content">
+          <h1 class="title"> Tenderloin Emergency Calls </h1>
+          <h2>Data Wrangling</h2>
+          <p>To better coordinate with the group theme, I picked the <strong>Tenderloin</strong> neighborhood to visualize specifically, since that neighborhood features heavily in the multineighborhood visualizations that Drew and Nick made. I used the DataSF web interface to filter on 2019 data where the call group type was FIRE and the final priority was 3 (emergency). Filtering on the FIRE call group type removed the calls for medical transport, sadly common in the Tenderloin, since I wanted to focus on the more traditional duties of the fire department.</p>
+          <p>Wrangling was carried out in both Excel and in Python. Some of the time calculations (extracting hour/min/sec and determining duration) were done in Excel first, and then I moved that processed file into Python (see FireDataParser.py) to merge repeat units and calculate updated durations.. </p>
+         <h2>Visualization</h2>
+           <svg id="bubble"><g id="x-grid"></g><g id="y-grid"></g></svg>
+           <!-- include d3.js -->
+           <script src="https://d3js.org/d3.v5.min.js"></script>
+
+           <!-- include d3-legend: https://d3-legend.susielu.com/ -->
+           <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" integrity="sha256-qo76Vs9B6JAALbrTn+PcN1r09hbNLd2M78V19glOMeU=" crossorigin="anonymous"></script>
+
+           <!-- craft visualization -->
+           <style type = text/css>
+
+             .tick line,
+             path.domain {
+               stroke: #e3e3e3;
+             }
+
+             text.axis-title, text.legendTitle {
+               font-size: 12px;
+               font-weight: bold;
+             }
+
+             #labels text {
+               font-size: 9px;
+               text-shadow: 1px 1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, -1px -1px 0 #fff;
+
+               /*
+                * text shadow:
+                * https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow
+                */
+             }
+
+             #color-axis path {
+               display: none;
+             }
+
+             .tick text, .legendCells text.label {
+               font-size: 9px;
+               fill: #666666;
+               font-weight: normal;
+             }
+
+             #color-axis line {
+               stroke: none;
+             }
+
+             #averages line {
+               stroke: black;
+               stroke-width: 1px;
+               stroke-opacity: 0.25;
+               stroke-dasharray: 2 1;
+             }
+
+             #averages text {
+               font-size: 10px;
+               fill: black;
+               fill-opacity: 0.5;
+             }
+
+             /*
+              * example of fancy CSS selection. see:
+              * https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes
+              */
+
+             #color-axis g.tick:not(:nth-child(2)):not(:last-child) line {
+               stroke: black;
+               stroke-width: 2;
+             }
+
+             .legendCells circle.swatch {
+               fill: none;
+               stroke: #888888;
+               stroke-width: 2;
+             }
+
+             .tooltip {
+               position: absolute;
+               width: auto;
+               height: auto;
+               padding: 5px;
+               background: #ddd;
+               pointer-events: none;
+               border: 1px solid #eee;
+               border-radius: 10px;
+             }
+
+             text, .tooltip {
+               font-family: sans-serif;
+               font-size: 10pt;
+             }
+
+             .dim {
+               fill-opacity: 0.3;
+             }
+
+               .grid line {
+                 stroke: lightgrey;
+                 stroke-opacity: 0.7;
+                 shape-rendering: crispEdges;
+               }
+
+               .grid path {
+                stroke-width: 0;
+              }
+
+</style>
+           <script src="bubblesdebug.js"></script>
+
+         <h2>Data Encoding</h2>
+         <p>This is a bubble chart where <strong>time of day</strong> is encoded as Y-axis position, <strong>time of year</strong> is encoded as X-axis position, <strong>call type category</strong> is encoded as color, and <strong>the total length of response time</strong> (summing up, for every unit, the time between receiving the call and that unit being available again) is encoded as the <strong>area</strong> of each bubble. </p>
+         <h2>Interactivity</h2>
+         <p>I implemented brushing and tooltips. When you mouse over a bubble, the selected bubble will be highlighted, and all bubbles of different call types will be faded to gray. A tooltip displaying more details about that call (date, time, units involved, etc.) will appear as well. </p>
+         <p>I also implemented a "click to send to back" functionality to ensure that viewers can still get details of smaller bubbles that are drawn in front. When a larger bubble is moused over, it will rise to the top, but clicking on it will send it to the back and bring the other smaller bubbles to the front.</p>
+         <h2>Conclusions</h2>
+        <p>Since Nick & Drew created more big-picture visualizations about fire department calls in San Francisco, I really wanted to supplement their contributions with a closer look at the daily realities of the SFFD's duties in one particular(ly notorious) neighborhood. Unlike their visualizations, I did not aggregate calls at all; each bubble is a single incident. </p>
+         <p>To quote my conclusions from my prototype:</p>
+         <blockquote>Most calls are outside fires, and most of them were responded to pretty quickly. Vehicle fires similarly seem to be relatively minor (makes sense considering smaller size of vehicle). However, industrial accidents and structure fires seem to take longer, potentially over an hour, before the unit is free again. In particular this neighborhood had two larger industrial accidents in 2019, which the other neighborhoods did not.</blockquote>
+         <p>When I wrangled the data for my visualization, I made sure to account for repeat rows and multiple units responding to the same call. Therefore, on the D3 visualization, the larger bubbles represent calls with more responding units: for example the large structure fires in February & March, the water rescues, and the industrial accidents. The smaller red "Outside Fire" calls (perhaps a trash can was on fire?) generally only required a single unit. Thanks to the additional wrangling, this difference in call length can be seen much more quickly.</p>
+         <p>An interesting observation is the apparent group of vehicle fires around June 13-14th from 10am through to around 8pm. While the summer is warmer and therefore more conducive to fire, this seems like a very concentrated spike of incidents, and I wonder if there was some sort of arsonist on the loose then?</p>
+         <p>Due to time constraints, this visualization only shows one year of one neighborhood's calls. An obvious way to expand this would be to allow a user to select a time range or a neighborhood to display. If the data is wrangled beforehand (preferably via running the same Python script repeatedly, rather than doing Excel operations on multiple files), then the filtered quantity of data points should not be too large to handle.</p>
+         <h2>Inspirations</h2>
+         <p>The bubble chart outline was taken from the <a href="https://gist.github.com/sjengle/22051097a8090fa227cbd80cdc2bad03">College Mobility bubble chart example</a>.</p>
+         <p>Interactivity was taken from the <a href="https://observablehq.com/@sjengle/interactivity?collection=@sjengle/interactive-scatterplot">Interactivity lab</a>.</p>
+         <p><a href="https://stackoverflow.com/questions/38921226/show-every-other-tick-label-on-d3-time-axis">Alternating Time Labels</a></p>
+    </div>
+</section>
+
+<!-- Page footer -->
+<!-- https://bulma.io/documentation/layout/footer/ -->
+<footer class="footer">
+    <div class="content has-text-centered is-size-7">
+        <p>
+            <a href="#top">
+                <span class="fas fa-arrow-up"></span>
+                <span class="has-text-weight-medium">Back to Top</span>
+            </a>
+        </p>
+
+        <p>
+            <a href="https://github.com/usf-cs360-spring2020/midterm-enigma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+                <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+            </a>
+
+            <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+                <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+            </a>
+
+            <a href="https://bulma.io" class="button is-small">
+                <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+            </a>
+        </p>
+    </div>
+</footer>
+<!-- End page footer -->
+
+<!-- Mobile menu responsiveness -->
+<!-- https://bulma.io/documentation/components/navbar/ -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    if ($navbarBurgers.length > 0) {
+      $navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+          el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+        });
+      });
+    }
+  });
+</script>
+<!-- End mobile menu responsiveness -->
+</body>
+
+</html>
